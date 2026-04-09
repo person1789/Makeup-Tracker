@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classroom Tracker</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+    <style>
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --bg: #f5f4f0;
+            --surface: #ffffff;
+            --surface2: #f0efe9;
+            --border: #dddbd3;
+            --border2: #ccc9bf;
+            --text: #1a1a18;
+            --text2: #6b6960;
+            --text3: #9b9890;
+            --green-bg: #e8f5e8;
+            --green: #2d7a2d;
+            --green-border: #b5d9b5;
+            --red-bg: #fdeaea;
+            --red: #b83232;
+            --red-border: #f0bbbb;
+            --blue-bg: #e8f0fd;
+            --blue: #2952b8;
+            --blue-border: #b5c9f5;
+            --amber-bg: #fdf5e0;
+            --amber: #8a6200;
+            --amber-border: #f0d87a;
+            --accent: #2952b8;
+            --radius: 8px;
+            --radius-lg: 12px;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            padding: 0 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 56px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: -0.3px;
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 2px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 3px;
+            margin-bottom: 1.5rem;
+            width: fit-content;
+        }
+
+        .tab {
+            padding: 7px 18px;
+            font-size: 13px;
+            font-weight: 500;
+            border: none;
+            background: transparent;
+            color: var(--text2);
+            cursor: pointer;
+            border-radius: 9px;
+            transition: all 0.15s;
+        }
+
+        .tab:hover {
+            color: var(--text);
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        .tab.active {
+            background: var(--surface);
+            color: var(--text);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 1rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            flex: 1;
+            min-width: 130px;
+        }
+
+        label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text2);
+        }
+
+        input[type=text],
+        input[type=date],
+        select {
+            height: 36px;
+            padding: 0 10px;
+            font-size: 13px;
+            font-family: inherit;
+            border: 1px solid var(--border2);
+            border-radius: var(--radius);
+            background: var(--bg);
+            color: var(--text);
+            outline: none;
+            transition: border 0.15s;
+        }
+
+        input[type=text]:focus,
+        input[type=date]:focus,
+        select:focus {
+            border-color: var(--accent);
+            background: var(--surface);
+        }
+
+        .btn {
+            height: 36px;
+            padding: 0 16px;
+            font-size: 13px;
+            font-family: inherit;
+            font-weight: 500;
+            border: 1px solid var(--border2);
+            border-radius: var(--radius);
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.15s;
+        }
+
+        .btn:hover {
+            background: var(--surface2);
+            border-color: var(--border2);
+        }
+
+        .btn.primary {
+            background: var(--text);
+            color: var(--surface);
+            border-color: var(--text);
+        }
+
+        .btn.primary:hover {
+            opacity: 0.85;
+        }
+
+        .btn.danger {
+            color: var(--red);
+            border-color: var(--red-border);
+        }
+
+        .btn.danger:hover {
+            background: var(--red-bg);
+        }
+
+        .btn.success {
+            color: var(--green);
+            border-color: var(--green-border);
+            background: var(--green-bg);
+        }
+
+        .btn.info {
+            color: var(--blue);
+            border-color: var(--blue-border);
+            background: var(--blue-bg);
+        }
+
+        .btn.sm {
+            height: 28px;
+            padding: 0 10px;
+            font-size: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        thead th {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border);
+            text-align: left;
+            background: var(--surface2);
+        }
+
+        tbody td {
+            padding: 9px 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        tbody tr:hover {
+            background: var(--surface2);
+        }
+
+        .overflow {
+            overflow-x: auto;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 500;
+            padding: 2px 8px;
+            border-radius: 99px;
+            border: 1px solid;
+        }
+
+        .badge-green {
+            background: var(--green-bg);
+            color: var(--green);
+            border-color: var(--green-border);
+        }
+
+        .badge-red {
+            background: var(--red-bg);
+            color: var(--red);
+            border-color: var(--red-border);
+        }
+
+        .badge-blue {
+            background: var(--blue-bg);
+            color: var(--blue);
+            border-color: var(--blue-border);
+        }
+
+        .badge-amber {
+            background: var(--amber-bg);
+            color: var(--amber);
+            border-color: var(--amber-border);
+        }
+
+        .badge-gray {
+            background: var(--surface2);
+            color: var(--text2);
+            border-color: var(--border);
+        }
+
+        .att-btn {
+            width: 34px;
+            height: 28px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--text3);
+            transition: all 0.1s;
+        }
+
+        .att-present {
+            background: var(--green-bg);
+            color: var(--green);
+            border-color: var(--green-border);
+        }
+
+        .att-absent {
+            background: var(--red-bg);
+            color: var(--red);
+            border-color: var(--red-border);
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 1.25rem;
+        }
+
+        .stat {
+            background: var(--surface2);
+            border-radius: var(--radius);
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+        }
+
+        .stat-num {
+            font-size: 24px;
+            font-weight: 600;
+            font-family: 'DM Mono', monospace;
+        }
+
+        .stat-lbl {
+            font-size: 11px;
+            color: var(--text2);
+            margin-top: 2px;
+        }
+
+        .empty {
+            color: var(--text3);
+            font-size: 13px;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .name-cell {
+            font-weight: 500;
+        }
+
+        .makeup-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .makeup-item:last-child {
+            border-bottom: none;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--text);
+            color: var(--surface);
+            padding: 10px 18px;
+            border-radius: var(--radius);
+            font-size: 13px;
+            font-weight: 500;
+            opacity: 0;
+            transition: opacity 0.2s;
+            pointer-events: none;
+            z-index: 999;
+        }
+
+        .toast.show {
+            opacity: 1;
+        }
+
+        .date-nav {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .date-nav input {
+            width: 150px;
+        }
+
+        @media (max-width: 600px) {
+            .main {
+                padding: 1rem;
+            }
+
+            header {
+                padding: 0 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">Classroom <span>Tracker</span></div>
+        <div class="header-actions">
+            <button class="btn info sm" onclick="exportCSV()">⬇ Download CSV</button>
+            <label class="btn sm" style="cursor:pointer; display:flex; align-items:center;">
+                ⬆ Import CSV
+                <input type="file" accept=".csv" style="display:none" onchange="importCSV(event)">
+            </label>
+        </div>
+    </header>
+
+    <div class="main">
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('attendance')">Attendance</button>
+            <button class="tab" onclick="switchTab('assignments')">Assignments</button>
+            <button class="tab" onclick="switchTab('makeup')">Makeup work</button>
+            <button class="tab" onclick="switchTab('students')">Students</button>
+        </div>
+
+        <!-- ATTENDANCE -->
+        <div id="tab-attendance" class="section active">
+            <div class="card">
+                <div class="card-title">Mark attendance</div>
+                <div class="date-nav">
+                    <button class="btn sm" onclick="shiftDate(-1)">◀</button>
+                    <input type="date" id="att-date" onchange="renderAttGrid()">
+                    <button class="btn sm" onclick="shiftDate(1)">▶</button>
+                    <button class="btn sm" onclick="goToday()">Today</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="overflow" id="att-grid"></div>
+            </div>
+        </div>
+
+        <!-- ASSIGNMENTS -->
+        <div id="tab-assignments" class="section">
+            <div class="card">
+                <div class="card-title">Add assignment</div>
+                <div class="form-row">
+                    <div class="form-group"><label>Assignment name</label><input type="text" id="asgn-name"
+                            placeholder="Essay #1, Quiz 3..."></div>
+                    <div class="form-group" style="max-width:160px"><label>Date assigned (X)</label><input type="date"
+                            id="asgn-date"></div>
+                    <div class="form-group" style="max-width:160px"><label>Due date (O)</label><input type="date"
+                            id="asgn-due"></div>
+                    <button class="btn primary" onclick="addAssignment()">Add</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">All assignments</div>
+                <div id="asgn-list"></div>
+            </div>
+        </div>
+
+        <!-- MAKEUP -->
+        <div id="tab-makeup" class="section">
+            <div id="makeup-content"></div>
+        </div>
+
+        <!-- STUDENTS -->
+        <div id="tab-students" class="section">
+            <div class="card">
+                <div class="card-title">Add student</div>
+                <div class="form-row">
+                    <div class="form-group"><label>Student name</label><input type="text" id="new-student"
+                            placeholder="First name or full name..." onkeydown="if(event.key==='Enter')addStudent()">
+                    </div>
+                    <button class="btn primary" onclick="addStudent()">Add</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">Students</div>
+                <div id="student-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // ── State ──────────────────────────────────────────────
+        let students = ['ruby', 'emerald', 'topaz', 'sapphire', 'pearl'];
+        let assignments = []; // {id, name, date, due}
+        let attendance = {};  // key: "name_YYYY-MM-DD" → "present"|"absent"
+
+        // ── Utilities ──────────────────────────────────────────
+        const fmt = d => { if (!d) return ''; const [y, m, dd] = d.split('-'); return `${m}/${dd}/${y}`; };
+        const today = () => new Date().toISOString().split('T')[0];
+        const addDays = (s, n) => { const d = new Date(s); d.setDate(d.getDate() + n); return d.toISOString().split('T')[0]; };
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2500);
+        }
+
+        // ── Tabs ───────────────────────────────────────────────
+        function switchTab(t) {
+            document.querySelectorAll('.tab').forEach((b, i) => {
+                b.classList.toggle('active', ['attendance', 'assignments', 'makeup', 'students'][i] === t);
+            });
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById('tab-' + t).classList.add('active');
+            if (t === 'makeup') renderMakeup();
+            if (t === 'students') renderStudents();
+            if (t === 'assignments') renderAssignments();
+        }
+
+        // ── Students ───────────────────────────────────────────
+        function renderStudents() {
+            const el = document.getElementById('student-list');
+            if (!students.length) { el.innerHTML = '<p class="empty">No students yet.</p>'; return; }
+            el.innerHTML = `<table><thead><tr><th>Name</th><th>Attendance records</th><th></th></tr></thead><tbody>${students.map(s => {
+                const days = Object.keys(attendance).filter(k => k.startsWith(s + '_')).length;
+                return `<tr><td class="name-cell">${s}</td><td><span class="badge badge-gray">${days} days tracked</span></td>
+        <td style="text-align:right"><button class="btn sm danger" onclick="removeStudent('${s}')">Remove</button></td></tr>`;
+            }).join('')
+                }</tbody></table>`;
+        }
+
+        function addStudent() {
+            const v = document.getElementById('new-student').value.trim().toLowerCase();
+            if (!v || students.includes(v)) { showToast(v ? 'Student already exists' : 'Enter a name'); return; }
+            students.push(v);
+            document.getElementById('new-student').value = '';
+            renderStudents(); renderAttGrid();
+            showToast(`Added ${v}`);
+        }
+
+        function removeStudent(s) {
+            if (!confirm(`Remove ${s} and all their attendance data?`)) return;
+            students = students.filter(x => x !== s);
+            Object.keys(attendance).filter(k => k.startsWith(s + '_')).forEach(k => delete attendance[k]);
+            renderStudents(); renderAttGrid();
+        }
+
+        // ── Assignments ────────────────────────────────────────
+        function renderAssignments() {
+            const el = document.getElementById('asgn-list');
+            if (!assignments.length) { el.innerHTML = '<p class="empty">No assignments yet.</p>'; return; }
+            el.innerHTML = `<table><thead><tr><th>Name</th><th>Assigned (X)</th><th>Due (O)</th><th></th></tr></thead><tbody>${assignments.map(a => `<tr>
+      <td class="name-cell">${a.name}</td>
+      <td><span class="badge badge-blue">X ${fmt(a.date)}</span></td>
+      <td><span class="badge badge-amber">O ${fmt(a.due)}</span></td>
+      <td style="text-align:right"><button class="btn sm danger" onclick="removeAsgn(${a.id})">Remove</button></td>
+    </tr>`).join('')
+                }</tbody></table>`;
+        }
+
+        function addAssignment() {
+            const name = document.getElementById('asgn-name').value.trim();
+            const date = document.getElementById('asgn-date').value;
+            const due = document.getElementById('asgn-due').value;
+            if (!name || !date || !due) { showToast('Fill in all fields'); return; }
+            if (due < date) { showToast('Due date must be after assigned date'); return; }
+            assignments.push({ id: Date.now(), name, date, due });
+            document.getElementById('asgn-name').value = '';
+            renderAssignments();
+            showToast(`Added "${name}"`);
+        }
+
+        function removeAsgn(id) {
+            assignments = assignments.filter(a => a.id !== id);
+            renderAssignments();
+        }
+
+        // ── Attendance ─────────────────────────────────────────
+        function shiftDate(n) {
+            const d = document.getElementById('att-date').value || today();
+            document.getElementById('att-date').value = addDays(d, n);
+            renderAttGrid();
+        }
+        function goToday() { document.getElementById('att-date').value = today(); renderAttGrid(); }
+
+        function renderAttGrid() {
+            const d = document.getElementById('att-date').value || today();
+            const el = document.getElementById('att-grid');
+            if (!students.length) { el.innerHTML = '<p class="empty">Add students in the Students tab first.</p>'; return; }
+
+            const dayAsgns = assignments.filter(a => a.date === d);
+            const dayDue = assignments.filter(a => a.due === d);
+
+            let badges = '';
+            dayAsgns.forEach(a => badges += `<span class="badge badge-blue" style="margin:2px">X ${a.name} assigned</span>`);
+            dayDue.forEach(a => badges += `<span class="badge badge-amber" style="margin:2px">O ${a.name} due</span>`);
+
+            let html = `<div style="margin-bottom:12px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+    <span style="font-size:13px;font-weight:600;font-family:DM Mono,monospace">${fmt(d) || 'Select a date'}</span>${badges}
+  </div>`;
+
+            const present = students.filter(s => attendance[s + '_' + d] === 'present').length;
+            const absent = students.filter(s => attendance[s + '_' + d] === 'absent').length;
+            const unmarked = students.length - present - absent;
+
+            html += `<div class="stat-grid" style="margin-bottom:1rem">
+    <div class="stat"><div class="stat-num" style="color:var(--green)">${present}</div><div class="stat-lbl">Present</div></div>
+    <div class="stat"><div class="stat-num" style="color:var(--red)">${absent}</div><div class="stat-lbl">Absent</div></div>
+    <div class="stat"><div class="stat-num" style="color:var(--text3)">${unmarked}</div><div class="stat-lbl">Not marked</div></div>
+  </div>`;
+
+            html += `<table><thead><tr><th>Student</th><th style="text-align:center;width:100px">Attendance</th><th>Makeup note</th></tr></thead><tbody>`;
+            students.forEach(s => {
+                const key = s + '_' + d;
+                const val = attendance[key] || 'none';
+                const note = getMakeupNote(s, d);
+                html += `<tr>
+      <td class="name-cell">${s}</td>
+      <td style="text-align:center">
+        <button class="att-btn ${val === 'present' ? 'att-present' : val === 'absent' ? 'att-absent' : ''}"
+          onclick="toggleAtt('${s}','${d}')">${val === 'present' ? 'P' : val === 'absent' ? 'A' : '—'}</button>
+      </td>
+      <td style="font-size:12px;color:var(--text2)">${note}</td>
+    </tr>`;
+            });
+            html += `</tbody></table>`;
+            el.innerHTML = html;
+        }
+
+        function toggleAtt(s, d) {
+            const k = s + '_' + d;
+            const cur = attendance[k] || 'none';
+            attendance[k] = cur === 'none' ? 'present' : cur === 'present' ? 'absent' : 'none';
+            renderAttGrid();
+        }
+
+        // ── Makeup logic ───────────────────────────────────────
+        function getAbsentDays(student, from, to) {
+            let count = 0, d = from;
+            while (d <= to) { if (attendance[student + '_' + d] === 'absent') count++; d = addDays(d, 1); }
+            return count;
+        }
+
+        function getMakeupDate(student, dueDate, absDays) {
+            let extra = absDays, d = addDays(dueDate, 1);
+            while (extra > 0) {
+                if (attendance[student + '_' + d] !== 'absent') extra--;
+                if (extra > 0) d = addDays(d, 1);
+            }
+            return d;
+        }
+
+        function getMakeupNote(student, date) {
+            return assignments
+                .filter(a => a.date <= date && a.due >= date)
+                .map(a => {
+                    const abs = getAbsentDays(student, a.date, date);
+                    if (abs > 0) return `Makeup "${a.name}" by ${fmt(getMakeupDate(student, a.due, abs))}`;
+                    return null;
+                }).filter(Boolean).join(' | ');
+        }
+
+        function renderMakeup() {
+            const el = document.getElementById('makeup-content');
+            if (!students.length || !assignments.length) {
+                el.innerHTML = '<div class="card"><p class="empty">Add students and assignments first.</p></div>'; return;
+            }
+            let html = '';
+            let anyMakeup = false;
+            students.forEach(s => {
+                const rows = [];
+                assignments.forEach(a => {
+                    const abs = getAbsentDays(s, a.date, a.due);
+                    if (abs > 0) rows.push({ a, abs, makeup: getMakeupDate(s, a.due, abs) });
+                });
+                if (rows.length) {
+                    anyMakeup = true;
+                    html += `<div class="card"><div class="card-title">${s}</div>`;
+                    rows.forEach(r => {
+                        html += `<div class="makeup-item">
+          <span style="font-weight:500;font-size:13px;min-width:100px">${r.a.name}</span>
+          <span class="badge badge-red">${r.abs} day${r.abs > 1 ? 's' : ''} absent</span>
+          <span style="font-size:12px;color:var(--text2)">Original due: <strong>${fmt(r.a.due)}</strong></span>
+          <span class="badge badge-amber">Makeup due: ${fmt(r.makeup)}</span>
+          <span style="font-size:11px;color:var(--text3)">(${r.abs} absent + 1 grace day)</span>
+        </div>`;
+                    });
+                    html += '</div>';
+                }
+            });
+            if (!anyMakeup) html = '<div class="card"><p class="empty">No makeup work needed — no absences overlap with any assignments.</p></div>';
+            el.innerHTML = html;
+        }
+
+        // ── CSV Export ─────────────────────────────────────────
+        function exportCSV() {
+            let csv = '';
+
+            // Section 1: students
+            csv += 'STUDENTS\n';
+            csv += students.join(',') + '\n\n';
+
+            // Section 2: assignments
+            csv += 'ASSIGNMENTS\n';
+            csv += 'id,name,date,due\n';
+            assignments.forEach(a => csv += `${a.id},"${a.name}",${a.date},${a.due}\n`);
+            csv += '\n';
+
+            // Section 3: attendance
+            csv += 'ATTENDANCE\n';
+            csv += 'student,date,status\n';
+            Object.entries(attendance).forEach(([k, v]) => {
+                if (v === 'none') return;
+                const [student, ...rest] = k.split('_');
+                const date = rest.join('_');
+                csv += `${student},${date},${v}\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `classroom_data_${today()}.csv`;
+            a.click();
+            showToast('CSV downloaded!');
+        }
+
+        // ── CSV Import ─────────────────────────────────────────
+        function importCSV(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                try {
+                    const lines = e.target.result.split('\n').map(l => l.trim()).filter(l => l);
+                    let mode = '';
+                    const newStudents = [], newAssignments = [], newAttendance = {};
+
+                    for (const line of lines) {
+                        if (line === 'STUDENTS') { mode = 'students'; continue; }
+                        if (line === 'ASSIGNMENTS') { mode = 'assignments'; continue; }
+                        if (line === 'ATTENDANCE') { mode = 'attendance'; continue; }
+                        if (line === 'id,name,date,due' || line === 'student,date,status') continue;
+                        if (!line) continue;
+
+                        if (mode === 'students') {
+                            line.split(',').map(s => s.trim()).filter(Boolean).forEach(s => newStudents.push(s));
+                        } else if (mode === 'assignments') {
+                            const [id, name, date, due] = parseCSVLine(line);
+                            if (id && name && date && due) newAssignments.push({ id: Number(id), name, date, due });
+                        } else if (mode === 'attendance') {
+                            const [student, date, status] = line.split(',');
+                            if (student && date && status) newAttendance[student + '_' + date] = status.trim();
+                        }
+                    }
+
+                    if (newStudents.length) {
+                        students = newStudents;
+                        assignments = newAssignments;
+                        attendance = newAttendance;
+                        renderAttGrid();
+                        showToast(`Imported: ${students.length} students, ${assignments.length} assignments`);
+                    } else {
+                        showToast('Could not read CSV — check file format');
+                    }
+                } catch (err) { showToast('Error reading CSV file'); }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function parseCSVLine(line) {
+            const result = [];
+            let cur = '', inQuote = false;
+            for (const ch of line) {
+                if (ch === '"') { inQuote = !inQuote; }
+                else if (ch === ',' && !inQuote) { result.push(cur); cur = ''; }
+                else cur += ch;
+            }
+            result.push(cur);
+            return result;
+        }
+
+        // ── Init ───────────────────────────────────────────────
+        document.getElementById('att-date').value = today();
+        document.getElementById('asgn-date').value = today();
+        document.getElementById('asgn-due').value = addDays(today(), 7);
+        renderAttGrid();
+    </script>
+</body>
+
+</html>
