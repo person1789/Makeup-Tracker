@@ -843,6 +843,7 @@
         let students = ['ruby', 'emerald', 'topaz', 'sapphire', 'pearl'];
         let assignments = [];
         let attendance = {};
+        let makeupCompleted = {};
 
         let calView = 'month';
         let calAnchor = new Date();
@@ -850,9 +851,10 @@
 
         // ── Utilities ─────────────────────────────────────────────────────────
         const fmt = d => { if (!d) return ''; const [y, m, dd] = d.split('-'); return `${m}/${dd}/${y}`; };
-        const today = () => new Date().toISOString().split('T')[0];
-        const addDays = (s, n) => { const d = new Date(s); d.setDate(d.getDate() + n); return d.toISOString().split('T')[0]; };
-        const isoDate = d => d.toISOString().split('T')[0];
+        const localDate = s => { const [y, m, d] = s.split('-'); return new Date(y, m - 1, d); };
+        const today = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+        const isoDate = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        const addDays = (s, n) => { const d = localDate(s); d.setDate(d.getDate() + n); return isoDate(d); };
         const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
@@ -938,7 +940,7 @@
                 cells.push({ date: `${y}-${String(m + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`, other: false });
             }
             while (cells.length % 7 !== 0) {
-                const last = new Date(cells[cells.length - 1].date); last.setDate(last.getDate() + 1);
+                const last = localDate(cells[cells.length - 1].date); last.setDate(last.getDate() + 1);
                 cells.push({ date: isoDate(last), other: true });
             }
 
@@ -987,7 +989,7 @@
             html += `<div class="week-hdr">Student</div>`;
             days.forEach((d, i) => {
                 const [, m, dd] = d.split('-');
-                html += `<div class="week-hdr${d === t ? ' today-cell' : ''}" style="${i === 6 ? 'border-right:none' : ''}">${DAYS[new Date(d).getDay()]}<br><span style="font-size:13px;color:var(--text)">${parseInt(dd)}</span></div>`;
+                html += `<div class="week-hdr${d === t ? ' today-cell' : ''}" style="${i === 6 ? 'border-right:none' : ''}">${DAYS[i]}<br><span style="font-size:13px;color:var(--text)">${parseInt(dd)}</span></div>`;
             });
             // Assignment row
             html += `<div class="week-row-lbl">Assignments</div>`;
@@ -1137,8 +1139,10 @@
             return assignments.map(a => {
                 const abs = getAbsentDays(student, a.date, a.due);
                 if (abs < 1) return null;
+                if (makeupCompleted[student + '_' + a.id]) return null;
                 const mu = getMakeupDate(student, a.due, abs);
-                return `<span class="badge badge-amber" style="margin:1px 2px">${a.name} &rarr; ${fmt(mu)}</span>`;
+                const isOverdue = mu < today();
+                return `<span class="badge ${isOverdue ? 'badge-red' : 'badge-amber'}" style="margin:1px 2px">${a.name} &rarr; ${fmt(mu)}</span>`;
             }).filter(Boolean).join(' ');
         }
 
@@ -1159,12 +1163,24 @@
                     html += `<div class="card">
         <div class="card-title">${s} &mdash; ${rows.length} makeup assignment${rows.length > 1 ? 's' : ''}</div>`;
                     rows.forEach(r => {
-                        html += `<div class="makeup-item">
-          <span style="font-weight:500;font-size:13px;min-width:130px">${r.a.name}</span>
-          <span class="badge badge-red">${r.abs} day${r.abs > 1 ? 's' : ''} absent</span>
-          <span style="font-size:12px;color:var(--text2)">Assigned: <strong>${fmt(r.a.date)}</strong> &nbsp; Original due: <strong>${fmt(r.a.due)}</strong></span>
-          <span class="badge badge-amber">Makeup due: ${fmt(r.makeup)}</span>
-          <span style="font-size:11px;color:var(--text3)">(${r.abs} absent day${r.abs > 1 ? 's' : ''} + 1 grace day from return)</span>
+                        const mKey = s + '_' + r.a.id;
+                        const isDone = makeupCompleted[mKey];
+                        const isOverdue = !isDone && r.makeup < today();
+                        let badgeStr = `<span class="badge ${isOverdue ? 'badge-red' : 'badge-amber'}">Makeup due: ${fmt(r.makeup)}</span>`;
+                         if (isDone) badgeStr = `<span class="badge badge-green">Completed</span>`;
+                        
+                        html += `<div class="makeup-item" style="display:flex;justify-content:space-between;align-items:center;${isDone ? 'opacity:0.6;background:var(--surface2)' : ''}">
+          <div style="flex:1">
+            <div style="margin-bottom:6px">
+              <span style="font-weight:600;font-size:14px;min-width:130px;display:inline-block">${r.a.name}</span>
+              ${badgeStr}
+            </div>
+            <div style="font-size:12px;color:var(--text2)">
+              Assigned: <strong>${fmt(r.a.date)}</strong> &nbsp; Original due: <strong>${fmt(r.a.due)}</strong>
+              <span class="badge badge-gray" style="margin-left:8px">${r.abs} day${r.abs > 1 ? 's' : ''} absent</span>
+            </div>
+          </div>
+          <button class="btn sm ${isDone ? '' : 'primary'}" onclick="toggleMakeup('${s}', ${r.a.id})">${isDone ? 'Undo' : 'Mark Complete'}</button>
         </div>`;
                     });
                     html += `</div>`;
@@ -1172,6 +1188,13 @@
             });
             if (!anyMakeup) html = '<div class="card"><p class="empty">No makeup work needed &mdash; no absences overlap with any assignments.</p></div>';
             el.innerHTML = html;
+        }
+
+        function toggleMakeup(s, id) {
+            const k = s + '_' + id;
+            if (makeupCompleted[k]) delete makeupCompleted[k]; else makeupCompleted[k] = true;
+            renderMakeup();
+            if (document.getElementById('tab-attendance').classList.contains('active')) renderAttGrid();
         }
 
         // ── Students ──────────────────────────────────────────────────────────
@@ -1241,6 +1264,8 @@
                 if (v === 'none') return;
                 const [student, ...rest] = k.split('_'); csv += `${student},${rest.join('_')},${v}\n`;
             });
+            csv += '\nMAKEUPS\nstudent_asgnId,completed\n';
+            Object.keys(makeupCompleted).forEach(k => csv += `${k},true\n`);
             const a = document.createElement('a');
             a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
             a.download = `classroom_data_${today()}.csv`; a.click();
@@ -1253,17 +1278,19 @@
             reader.onload = e => {
                 try {
                     const lines = e.target.result.split('\n').map(l => l.trim()).filter(l => l);
-                    let mode = ''; const ns = [], na = [], natt = {};
+                    let mode = ''; const ns = [], na = [], natt = {}, nmu = {};
                     for (const line of lines) {
                         if (line === 'STUDENTS') { mode = 'students'; continue; }
                         if (line === 'ASSIGNMENTS') { mode = 'assignments'; continue; }
                         if (line === 'ATTENDANCE') { mode = 'attendance'; continue; }
-                        if (line === 'id,name,date,due' || line === 'student,date,status') continue;
+                        if (line === 'MAKEUPS') { mode = 'makeups'; continue; }
+                        if (line === 'id,name,date,due' || line === 'student,date,status' || line === 'student_asgnId,completed') continue;
                         if (mode === 'students') line.split(',').map(s => s.trim()).filter(Boolean).forEach(s => ns.push(s));
                         else if (mode === 'assignments') { const [id, name, date, due] = parseCSVLine(line); if (id && name && date && due) na.push({ id: Number(id), name, date, due }); }
                         else if (mode === 'attendance') { const [student, date, status] = line.split(','); if (student && date && status) natt[student + '_' + date] = status.trim(); }
+                        else if (mode === 'makeups') { const [k, v] = line.split(','); if (k && v === 'true') nmu[k] = true; }
                     }
-                    if (ns.length) { students = ns; assignments = na; attendance = natt; renderAttGrid(); renderCal(); showToast(`Imported: ${ns.length} students, ${na.length} assignments`); }
+                    if (ns.length) { students = ns; assignments = na; attendance = natt; makeupCompleted = nmu; renderAttGrid(); renderCal(); showToast(`Imported: ${ns.length} students, ${na.length} assignments`); }
                     else showToast('Could not read CSV');
                 } catch (e) { showToast('Error reading CSV'); }
             };
