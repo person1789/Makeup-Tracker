@@ -693,6 +693,102 @@
                 min-height: 70px;
             }
         }
+        .help-btn {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            font-size: 22px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(41, 82, 184, 0.3);
+            z-index: 900;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .help-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(41, 82, 184, 0.4);
+        }
+
+        .help-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .help-modal {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 600px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .help-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .help-content {
+            padding: 1.5rem;
+            overflow-y: auto;
+        }
+
+        .help-step {
+            margin-bottom: 2rem;
+            background: var(--bg);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            overflow: hidden;
+        }
+
+        .help-step-img {
+            background: #e8e8e8;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            min-height: 120px;
+        }
+
+        .help-step-text {
+            padding: 1.25rem;
+            background: var(--surface);
+        }
+
+        .help-step-text h3 {
+            font-size: 15px;
+            margin-bottom: 8px;
+            color: var(--accent);
+        }
+
+        .help-step-text p {
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--text2);
+        }
     </style>
 </head>
 
@@ -832,6 +928,84 @@
             <div class="modal-actions">
                 <button class="btn" onclick="cancelModal()">Cancel</button>
                 <button class="btn primary" id="modal-save-btn" onclick="saveModal()" disabled>Save assignment</button>
+            </div>
+        </div>
+    </div>
+
+    <button id="help-btn" class="help-btn" onclick="openHelp()" title="How to use">&#63;</button>
+
+    <div class="help-overlay" id="help-overlay" onclick="closeHelp(event)">
+        <div class="help-modal" onclick="event.stopPropagation()">
+            <div class="help-header">
+                <h2 style="font-size:18px">How to use Classroom Tracker</h2>
+                <button class="btn sm" onclick="closeHelp()">Close</button>
+            </div>
+            <div class="help-content">
+                <!-- Step 1 -->
+                <div class="help-step">
+                    <div class="help-step-img" style="background:#e8f0fd">
+                         <div style="background:var(--surface);padding:10px;border-radius:var(--radius);border:1px solid var(--blue-bd);min-width:200px">
+                             <div style="font-size:12px;font-weight:600;margin-bottom:8px">Students Tab</div>
+                             <div style="display:flex;gap:5px"><input type="text" value="Alice" readonly style="height:28px;flex:1;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:0 8px;color:var(--text)"><button class="btn primary sm" style="height:28px" disabled>Add</button></div>
+                         </div>
+                    </div>
+                    <div class="help-step-text">
+                        <h3>1. Add Students</h3>
+                        <p>Go to the <strong>Students</strong> tab to build your roster. Enter names one by one, or import them via CSV. All attendance tracking relies on having your students set up first.</p>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="help-step">
+                    <div class="help-step-img" style="background:#fcfbed">
+                         <div class="week-grid" style="grid-template-columns: repeat(2, 1fr); width: 220px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border); background: var(--surface); border-radius: var(--radius); pointer-events:none;">
+                              <div class="week-hdr">Tue</div><div class="week-hdr" style="border-right:none">Wed</div>
+                              <div class="week-cell picking-due" style="height:50px"><div class="cal-asgn-bar cal-asgn-start">X Essay</div></div>
+                              <div class="week-cell" style="height:50px;border-right:none"><div class="pick-hint" style="color:var(--amber);text-align:center;font-size:10px;margin-top:4px">click to set due</div></div>
+                        </div>
+                    </div>
+                    <div class="help-step-text">
+                        <h3>2. Create Assignments the Fast Way</h3>
+                        <p>In the Calendar view: <strong style="color:var(--blue)">Double-click</strong> any day to assign work on that day. Then, <strong style="color:var(--amber)">Single-click</strong> a future day to set the due date. The assignment menu will immediately open, pre-filled with your selected dates!</p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="help-step">
+                    <div class="help-step-img" style="background:#f0efe9">
+                         <table style="width:240px; background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); box-shadow:0 4px 12px rgba(0,0,0,.05); pointer-events:none; border-collapse:collapse;">
+                              <thead><tr><th style="padding:8px;font-size:12px;color:var(--text2)">Student</th><th style="padding:8px;text-align:center;font-size:12px;color:var(--text2)">Attendance</th></tr></thead>
+                              <tbody>
+                                <tr><td style="padding:8px;border-top:1px solid var(--border);font-size:13px">ruby</td><td style="padding:8px;text-align:center;border-top:1px solid var(--border)"><button class="att-btn att-absent">A</button></td></tr>
+                                <tr><td style="padding:8px;border-top:1px solid var(--border);font-size:13px">emerald</td><td style="padding:8px;text-align:center;border-top:1px solid var(--border)"><button class="att-btn att-present">P</button></td></tr>
+                              </tbody>
+                        </table>
+                    </div>
+                    <div class="help-step-text">
+                        <h3>3. Take Attendance</h3>
+                        <p>Go to the <strong>Attendance</strong> tab, select today's date, and click the blank button next to a student to cycle their attendance to <strong>P</strong> (Present) or <strong>A</strong> (Absent).</p>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="help-step">
+                    <div class="help-step-img" style="background:#fffcf0">
+                         <div class="makeup-item" style="width:280px; box-shadow:0 4px 12px rgba(0,0,0,.05); border:1px solid var(--border); background:var(--surface); border-radius:var(--radius); padding:10px; pointer-events:none;">
+                           <div style="flex:1">
+                             <div style="margin-bottom:6px">
+                               <span style="font-weight:600;font-size:14px;margin-right:8px">Essay 1</span>
+                               <span class="badge badge-amber">Makeup due: 04/16</span>
+                             </div>
+                             <div style="font-size:12px;color:var(--text2)"><span class="badge badge-gray">1 day absent</span></div>
+                           </div>
+                           <button class="btn sm primary" style="margin-top:10px">Mark Complete</button>
+                        </div>
+                    </div>
+                    <div class="help-step-text">
+                        <h3>4. Manage Makeup Work</h3>
+                        <p>The system automatically tracks missing work! If a student is marked Absent during an assignment's active window, the <strong>Makeup Work</strong> tab will calculate a new extended "Makeup Due Date" based on how many days they missed. Once they submit it, click "Mark Complete" to clear it.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1055,10 +1229,20 @@
         }
 
         document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape' && creatingAsgn) {
-                cancelModal();
+            if (event.key === 'Escape') {
+                if (creatingAsgn) cancelModal();
+                if (document.getElementById('help-overlay').style.display === 'flex') closeHelp();
             }
         });
+
+        function openHelp() {
+            document.getElementById('help-overlay').style.display = 'flex';
+        }
+
+        function closeHelp(event) {
+            if (event && event.target.id !== 'help-overlay') return;
+            document.getElementById('help-overlay').style.display = 'none';
+        }
 
         function saveModal() {
             const name = document.getElementById('modal-name').value.trim();
