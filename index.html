@@ -19,7 +19,7 @@
 
         :root {
             --bg: #f5f4f0;
-            --surface: #ffffff;
+            --surface: #fff;
             --surface2: #f0efe9;
             --border: #dddbd3;
             --border2: #ccc9bf;
@@ -28,16 +28,16 @@
             --text3: #9b9890;
             --green-bg: #e8f5e8;
             --green: #2d7a2d;
-            --green-border: #b5d9b5;
+            --green-bd: #b5d9b5;
             --red-bg: #fdeaea;
             --red: #b83232;
-            --red-border: #f0bbbb;
+            --red-bd: #f0bbbb;
             --blue-bg: #e8f0fd;
             --blue: #2952b8;
-            --blue-border: #b5c9f5;
+            --blue-bd: #b5c9f5;
             --amber-bg: #fdf5e0;
             --amber: #8a6200;
-            --amber-border: #f0d87a;
+            --amber-bd: #f0d87a;
             --accent: #2952b8;
             --radius: 8px;
             --radius-lg: 12px;
@@ -60,7 +60,7 @@
             height: 56px;
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 200;
         }
 
         .logo {
@@ -80,7 +80,7 @@
         }
 
         .main {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
         }
@@ -105,18 +105,18 @@
             color: var(--text2);
             cursor: pointer;
             border-radius: 9px;
-            transition: all 0.15s;
+            transition: all .15s;
         }
 
         .tab:hover {
             color: var(--text);
-            background: rgba(0, 0, 0, 0.04);
+            background: rgba(0, 0, 0, .04);
         }
 
         .tab.active {
             background: var(--surface);
             color: var(--text);
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
         }
 
         .section {
@@ -140,7 +140,7 @@
             font-weight: 600;
             color: var(--text2);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
+            letter-spacing: .5px;
             margin-bottom: 1rem;
         }
 
@@ -177,12 +177,11 @@
             background: var(--bg);
             color: var(--text);
             outline: none;
-            transition: border 0.15s;
+            transition: border .15s;
         }
 
         input[type=text]:focus,
-        input[type=date]:focus,
-        select:focus {
+        input[type=date]:focus {
             border-color: var(--accent);
             background: var(--surface);
         }
@@ -199,12 +198,11 @@
             color: var(--text);
             cursor: pointer;
             white-space: nowrap;
-            transition: all 0.15s;
+            transition: all .15s;
         }
 
         .btn:hover {
             background: var(--surface2);
-            border-color: var(--border2);
         }
 
         .btn.primary {
@@ -214,27 +212,21 @@
         }
 
         .btn.primary:hover {
-            opacity: 0.85;
+            opacity: .85;
         }
 
         .btn.danger {
             color: var(--red);
-            border-color: var(--red-border);
+            border-color: var(--red-bd);
         }
 
         .btn.danger:hover {
             background: var(--red-bg);
         }
 
-        .btn.success {
-            color: var(--green);
-            border-color: var(--green-border);
-            background: var(--green-bg);
-        }
-
         .btn.info {
             color: var(--blue);
-            border-color: var(--blue-border);
+            border-color: var(--blue-bd);
             background: var(--blue-bg);
         }
 
@@ -242,6 +234,12 @@
             height: 28px;
             padding: 0 10px;
             font-size: 12px;
+        }
+
+        .btn.active-view {
+            background: var(--text);
+            color: var(--surface);
+            border-color: var(--text);
         }
 
         table {
@@ -255,7 +253,7 @@
             font-weight: 600;
             color: var(--text3);
             text-transform: uppercase;
-            letter-spacing: 0.4px;
+            letter-spacing: .4px;
             padding: 8px 12px;
             border-bottom: 1px solid var(--border);
             text-align: left;
@@ -292,25 +290,25 @@
         .badge-green {
             background: var(--green-bg);
             color: var(--green);
-            border-color: var(--green-border);
+            border-color: var(--green-bd);
         }
 
         .badge-red {
             background: var(--red-bg);
             color: var(--red);
-            border-color: var(--red-border);
+            border-color: var(--red-bd);
         }
 
         .badge-blue {
             background: var(--blue-bg);
             color: var(--blue);
-            border-color: var(--blue-border);
+            border-color: var(--blue-bd);
         }
 
         .badge-amber {
             background: var(--amber-bg);
             color: var(--amber);
-            border-color: var(--amber-border);
+            border-color: var(--amber-bd);
         }
 
         .badge-gray {
@@ -329,24 +327,24 @@
             border: 1px solid var(--border);
             background: var(--surface2);
             color: var(--text3);
-            transition: all 0.1s;
+            transition: all .1s;
         }
 
         .att-present {
             background: var(--green-bg);
             color: var(--green);
-            border-color: var(--green-border);
+            border-color: var(--green-bd);
         }
 
         .att-absent {
             background: var(--red-bg);
             color: var(--red);
-            border-color: var(--red-border);
+            border-color: var(--red-bd);
         }
 
         .stat-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
             gap: 10px;
             margin-bottom: 1.25rem;
         }
@@ -359,7 +357,7 @@
         }
 
         .stat-num {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 600;
             font-family: 'DM Mono', monospace;
         }
@@ -383,7 +381,7 @@
 
         .makeup-item {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 10px;
             flex-wrap: wrap;
             padding: 10px 0;
@@ -405,9 +403,9 @@
             font-size: 13px;
             font-weight: 500;
             opacity: 0;
-            transition: opacity 0.2s;
+            transition: opacity .2s;
             pointer-events: none;
-            z-index: 999;
+            z-index: 9999;
         }
 
         .toast.show {
@@ -418,19 +416,283 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            flex-wrap: wrap;
         }
 
-        .date-nav input {
-            width: 150px;
+        .view-toggle {
+            display: flex;
+            gap: 4px;
         }
 
-        @media (max-width: 600px) {
+        /* ── CALENDAR ── */
+        .cal-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .cal-header {
+            background: var(--surface2);
+            padding: 8px 0;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text3);
+            text-transform: uppercase;
+            letter-spacing: .4px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cal-cell {
+            min-height: 100px;
+            padding: 6px;
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            cursor: pointer;
+            position: relative;
+            background: var(--surface);
+            transition: background .1s;
+            user-select: none;
+        }
+
+        .cal-cell:nth-child(7n) {
+            border-right: none;
+        }
+
+        .cal-cell.other-month {
+            background: var(--surface2);
+            opacity: .6;
+        }
+
+        .cal-cell.today-cell {
+            background: #f0f4ff;
+        }
+
+        .cal-cell.picking-due:hover {
+            background: #fffbf0 !important;
+            outline: 2px dashed var(--amber);
+            outline-offset: -3px;
+        }
+
+        .cal-cell.other-month.picking-due {
+            pointer-events: none;
+        }
+
+        .cal-date-num {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text2);
+            margin-bottom: 3px;
+            width: 22px;
+            height: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .cal-cell.today-cell .cal-date-num {
+            background: var(--accent);
+            color: #fff;
+            font-size: 11px;
+        }
+
+        .cal-asgn-bar {
+            font-size: 10px;
+            font-weight: 500;
+            padding: 1px 5px;
+            border-radius: 3px;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .cal-asgn-start {
+            background: var(--blue-bg);
+            color: var(--blue);
+            border-left: 3px solid var(--blue);
+        }
+
+        .cal-asgn-mid {
+            background: var(--blue-bg);
+            color: var(--blue);
+            opacity: .6;
+        }
+
+        .cal-asgn-end {
+            background: var(--amber-bg);
+            color: var(--amber);
+            border-right: 3px solid var(--amber);
+        }
+
+        .cal-asgn-solo {
+            background: var(--blue-bg);
+            color: var(--blue);
+            border: 1px solid var(--blue-bd);
+        }
+
+        .cal-dots {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px;
+            margin-top: 4px;
+        }
+
+        .cal-dot-p {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--green);
+        }
+
+        .cal-dot-a {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--red);
+        }
+
+        .pick-hint {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--amber);
+            background: var(--amber-bg);
+            border: 1px solid var(--amber-bd);
+            border-radius: 3px;
+            padding: 1px 4px;
+            pointer-events: none;
+        }
+
+        /* week view */
+        .week-grid {
+            display: grid;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+        }
+
+        .week-hdr {
+            background: var(--surface2);
+            padding: 8px 6px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text3);
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+        }
+
+        .week-row-lbl {
+            background: var(--surface2);
+            padding: 6px 10px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text2);
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .week-cell {
+            padding: 5px;
+            border-right: 1px solid var(--border);
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+            min-height: 56px;
+            cursor: pointer;
+            transition: background .1s;
+        }
+
+        .week-cell.today-cell {
+            background: #f0f4ff;
+        }
+
+        .week-cell:hover {
+            background: #f5f7ff;
+        }
+
+        .week-cell.picking-due:hover {
+            background: #fffbf0 !important;
+            outline: 2px dashed var(--amber);
+            outline-offset: -2px;
+        }
+
+        .week-cell.no-right {
+            border-right: none;
+        }
+
+        /* modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .4);
+            z-index: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+
+        .modal {
+            background: var(--surface);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            width: 380px;
+            max-width: 92vw;
+            border: 1px solid var(--border);
+            pointer-events: auto;
+        }
+
+        .modal-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .modal-hint {
+            font-size: 12px;
+            color: var(--amber);
+            background: var(--amber-bg);
+            border: 1px solid var(--amber-bd);
+            border-radius: var(--radius);
+            padding: 7px 10px;
+            margin-top: .75rem;
+        }
+
+        .modal-hint.ready {
+            color: var(--green);
+            background: var(--green-bg);
+            border-color: var(--green-bd);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 1.25rem;
+        }
+
+        @media(max-width:700px) {
             .main {
                 padding: 1rem;
             }
 
             header {
                 padding: 0 1rem;
+            }
+
+            .cal-cell {
+                min-height: 70px;
             }
         }
     </style>
@@ -442,7 +704,7 @@
         <div class="logo">Classroom <span>Tracker</span></div>
         <div class="header-actions">
             <button class="btn info sm" onclick="exportCSV()">⬇ Download CSV</button>
-            <label class="btn sm" style="cursor:pointer; display:flex; align-items:center;">
+            <label class="btn sm" style="cursor:pointer;display:flex;align-items:center;">
                 ⬆ Import CSV
                 <input type="file" accept=".csv" style="display:none" onchange="importCSV(event)">
             </label>
@@ -451,20 +713,51 @@
 
     <div class="main">
         <div class="tabs">
-            <button class="tab active" onclick="switchTab('attendance')">Attendance</button>
+            <button class="tab active" onclick="switchTab('calendar')">Calendar</button>
+            <button class="tab" onclick="switchTab('attendance')">Attendance</button>
             <button class="tab" onclick="switchTab('assignments')">Assignments</button>
             <button class="tab" onclick="switchTab('makeup')">Makeup work</button>
             <button class="tab" onclick="switchTab('students')">Students</button>
         </div>
 
-        <!-- ATTENDANCE -->
-        <div id="tab-attendance" class="section active">
+        <!-- CALENDAR TAB -->
+        <div id="tab-calendar" class="section active">
+            <div class="card" style="padding:1rem 1.25rem">
+                <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+                    <div class="date-nav">
+                        <button class="btn sm" onclick="calShift(-1)">&#9664;</button>
+                        <span id="cal-label"
+                            style="font-size:14px;font-weight:600;min-width:200px;text-align:center;font-family:'DM Mono',monospace"></span>
+                        <button class="btn sm" onclick="calShift(1)">&#9654;</button>
+                        <button class="btn sm" onclick="calGoToday()">Today</button>
+                    </div>
+                    <div class="view-toggle">
+                        <button class="btn sm" id="btn-week" onclick="setCalView('week')">Week</button>
+                        <button class="btn sm active-view" id="btn-month" onclick="setCalView('month')">Month</button>
+                    </div>
+                </div>
+                <div style="margin-top:10px;font-size:12px;color:var(--text3)">
+                    <strong style="color:var(--blue)">Double-click</strong> a day to create an assignment starting that
+                    day &nbsp;&middot;&nbsp;
+                    then <strong style="color:var(--amber)">click another day</strong> to set the due date
+                    &nbsp;&middot;&nbsp;
+                    <span style="color:var(--green)">&#9679;</span> present &nbsp;
+                    <span style="color:var(--red)">&#9679;</span> absent
+                </div>
+            </div>
+            <div class="card" style="padding:.75rem 1rem">
+                <div id="cal-body"></div>
+            </div>
+        </div>
+
+        <!-- ATTENDANCE TAB -->
+        <div id="tab-attendance" class="section">
             <div class="card">
                 <div class="card-title">Mark attendance</div>
                 <div class="date-nav">
-                    <button class="btn sm" onclick="shiftDate(-1)">◀</button>
+                    <button class="btn sm" onclick="shiftDate(-1)">&#9664;</button>
                     <input type="date" id="att-date" onchange="renderAttGrid()">
-                    <button class="btn sm" onclick="shiftDate(1)">▶</button>
+                    <button class="btn sm" onclick="shiftDate(1)">&#9654;</button>
                     <button class="btn sm" onclick="goToday()">Today</button>
                 </div>
             </div>
@@ -473,7 +766,7 @@
             </div>
         </div>
 
-        <!-- ASSIGNMENTS -->
+        <!-- ASSIGNMENTS TAB -->
         <div id="tab-assignments" class="section">
             <div class="card">
                 <div class="card-title">Add assignment</div>
@@ -493,12 +786,12 @@
             </div>
         </div>
 
-        <!-- MAKEUP -->
+        <!-- MAKEUP TAB -->
         <div id="tab-makeup" class="section">
             <div id="makeup-content"></div>
         </div>
 
-        <!-- STUDENTS -->
+        <!-- STUDENTS TAB -->
         <div id="tab-students" class="section">
             <div class="card">
                 <div class="card-title">Add student</div>
@@ -516,44 +809,376 @@
         </div>
     </div>
 
+    <!-- MODAL -->
+    <div class="modal-overlay" id="modal" style="display:none">
+        <div class="modal">
+            <div class="modal-title" id="modal-title">New assignment</div>
+            <div class="form-group" style="margin-bottom:12px">
+                <label>Assignment name</label>
+                <input type="text" id="modal-name" placeholder="Essay #1, Quiz 3...">
+            </div>
+            <div style="display:flex;gap:10px">
+                <div class="form-group">
+                    <label>Assigned (X)</label>
+                    <input type="date" id="modal-start" readonly
+                        style="background:var(--blue-bg);border-color:var(--blue-bd);color:var(--blue)">
+                </div>
+                <div class="form-group">
+                    <label>Due date (O)</label>
+                    <input type="date" id="modal-due" readonly
+                        style="background:var(--amber-bg);border-color:var(--amber-bd);color:var(--amber)">
+                </div>
+            </div>
+            <div class="modal-hint" id="modal-hint">Click any day on the calendar behind this box to set the due date.
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="cancelModal()">Cancel</button>
+                <button class="btn primary" id="modal-save-btn" onclick="saveModal()" disabled>Save assignment</button>
+            </div>
+        </div>
+    </div>
+
     <div class="toast" id="toast"></div>
 
     <script>
-        // ── State ──────────────────────────────────────────────
+        // ── State ────────────────────────────────────────────────────────────
         let students = ['ruby', 'emerald', 'topaz', 'sapphire', 'pearl'];
-        let assignments = []; // {id, name, date, due}
-        let attendance = {};  // key: "name_YYYY-MM-DD" → "present"|"absent"
+        let assignments = [];
+        let attendance = {};
 
-        // ── Utilities ──────────────────────────────────────────
+        let calView = 'month';
+        let calAnchor = new Date();
+        let creatingAsgn = null; // {start: 'YYYY-MM-DD'} while picking due date
+
+        // ── Utilities ─────────────────────────────────────────────────────────
         const fmt = d => { if (!d) return ''; const [y, m, dd] = d.split('-'); return `${m}/${dd}/${y}`; };
         const today = () => new Date().toISOString().split('T')[0];
         const addDays = (s, n) => { const d = new Date(s); d.setDate(d.getDate() + n); return d.toISOString().split('T')[0]; };
+        const isoDate = d => d.toISOString().split('T')[0];
+        const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
         function showToast(msg) {
-            const t = document.getElementById('toast');
-            t.textContent = msg; t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 2500);
+            const t = document.getElementById('toast'); t.textContent = msg;
+            t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2600);
         }
 
-        // ── Tabs ───────────────────────────────────────────────
-        function switchTab(t) {
+        // ── Tabs ──────────────────────────────────────────────────────────────
+        function switchTab(name) {
             document.querySelectorAll('.tab').forEach((b, i) => {
-                b.classList.toggle('active', ['attendance', 'assignments', 'makeup', 'students'][i] === t);
+                b.classList.toggle('active', ['calendar', 'attendance', 'assignments', 'makeup', 'students'][i] === name);
             });
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.getElementById('tab-' + t).classList.add('active');
-            if (t === 'makeup') renderMakeup();
-            if (t === 'students') renderStudents();
-            if (t === 'assignments') renderAssignments();
+            document.getElementById('tab-' + name).classList.add('active');
+            if (name === 'makeup') renderMakeup();
+            if (name === 'students') renderStudents();
+            if (name === 'assignments') renderAssignments();
+            if (name === 'calendar') renderCal();
         }
 
-        // ── Students ───────────────────────────────────────────
+        // ── Calendar view ─────────────────────────────────────────────────────
+        function setCalView(v) {
+            calView = v;
+            document.getElementById('btn-week').classList.toggle('active-view', v === 'week');
+            document.getElementById('btn-month').classList.toggle('active-view', v === 'month');
+            renderCal();
+        }
+
+        function calShift(n) {
+            if (calView === 'month') {
+                calAnchor = new Date(calAnchor.getFullYear(), calAnchor.getMonth() + n, 1);
+            } else {
+                const d = new Date(calAnchor); d.setDate(d.getDate() + n * 7); calAnchor = d;
+            }
+            renderCal();
+        }
+
+        function calGoToday() { calAnchor = new Date(); renderCal(); }
+
+        function renderCal() { calView === 'month' ? renderMonthCal() : renderWeekCal(); }
+
+        // ── Assignment bars ───────────────────────────────────────────────────
+        function asgnBarsForDay(dateStr) {
+            let html = '';
+            assignments.forEach(a => {
+                const same = a.date === dateStr && a.due === dateStr;
+                const isStart = a.date === dateStr && !same;
+                const isEnd = a.due === dateStr && !same;
+                const isMid = dateStr > a.date && dateStr < a.due;
+                if (same) html += `<div class="cal-asgn-bar cal-asgn-solo" title="${a.name}: assigned &amp; due">X/O ${a.name}</div>`;
+                else if (isStart) html += `<div class="cal-asgn-bar cal-asgn-start" title="${a.name}: assigned">X ${a.name}</div>`;
+                else if (isEnd) html += `<div class="cal-asgn-bar cal-asgn-end" title="${a.name}: due">O ${a.name}</div>`;
+                else if (isMid) html += `<div class="cal-asgn-bar cal-asgn-mid" title="${a.name}">&#183; ${a.name}</div>`;
+            });
+            return html;
+        }
+
+        function attDotsForDay(dateStr) {
+            let html = '<div class="cal-dots">';
+            students.forEach(s => {
+                const v = attendance[s + '_' + dateStr];
+                if (v === 'present') html += `<span class="cal-dot-p" title="${s}: present"></span>`;
+                else if (v === 'absent') html += `<span class="cal-dot-a" title="${s}: absent"></span>`;
+            });
+            return html + '</div>';
+        }
+
+        // ── Month calendar ────────────────────────────────────────────────────
+        function renderMonthCal() {
+            const y = calAnchor.getFullYear(), m = calAnchor.getMonth();
+            document.getElementById('cal-label').textContent = MONTHS[m] + ' ' + y;
+            const firstDow = new Date(y, m, 1).getDay();
+            const daysInMonth = new Date(y, m + 1, 0).getDate();
+            const t = today();
+
+            let cells = [];
+            for (let i = 0; i < firstDow; i++) {
+                const d = new Date(y, m, 1 - firstDow + i);
+                cells.push({ date: isoDate(d), other: true });
+            }
+            for (let i = 1; i <= daysInMonth; i++) {
+                cells.push({ date: `${y}-${String(m + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`, other: false });
+            }
+            while (cells.length % 7 !== 0) {
+                const last = new Date(cells[cells.length - 1].date); last.setDate(last.getDate() + 1);
+                cells.push({ date: isoDate(last), other: true });
+            }
+
+            let html = '<div class="cal-grid">';
+            DAYS.forEach(d => html += `<div class="cal-header">${d}</div>`);
+            cells.forEach(({ date, other }) => {
+                const dd = parseInt(date.split('-')[2]);
+                const isToday = date === t;
+                const picking = creatingAsgn && !other;
+                let cls = 'cal-cell';
+                if (other) cls += ' other-month';
+                if (isToday) cls += ' today-cell';
+                if (picking) cls += ' picking-due';
+                const hint = picking ? `<div class="pick-hint">click to set due</div>` : '';
+                html += `<div class="${cls}"
+      ondblclick="onCalDbl('${date}',${other})"
+      onclick="onCalClick('${date}',${other})">
+      <div class="cal-date-num">${dd}</div>
+      ${asgnBarsForDay(date)}
+      ${other ? '' : attDotsForDay(date)}
+      ${hint}
+    </div>`;
+            });
+            html += '</div>';
+            document.getElementById('cal-body').innerHTML = html;
+        }
+
+        // ── Week calendar ─────────────────────────────────────────────────────
+        function renderWeekCal() {
+            const anchor = new Date(calAnchor);
+            const sunday = new Date(anchor); sunday.setDate(anchor.getDate() - anchor.getDay());
+            const days = [];
+            for (let i = 0; i < 7; i++) { const d = new Date(sunday); d.setDate(sunday.getDate() + i); days.push(isoDate(d)); }
+
+            const [fy, fm, fd] = days[0].split('-');
+            const [ly, lm, ld] = days[6].split('-');
+            document.getElementById('cal-label').textContent =
+                MONTHS[parseInt(fm) - 1] + ' ' + parseInt(fd) + ' \u2013 ' +
+                (fm !== lm ? MONTHS[parseInt(lm) - 1] + ' ' : '') + parseInt(ld) + ', ' + ly;
+
+            const t = today();
+            const cols = `80px repeat(7, 1fr)`;
+
+            let html = `<div class="week-grid" style="grid-template-columns:${cols}">`;
+            // Header
+            html += `<div class="week-hdr">Student</div>`;
+            days.forEach((d, i) => {
+                const [, m, dd] = d.split('-');
+                html += `<div class="week-hdr${d === t ? ' today-cell' : ''}" style="${i === 6 ? 'border-right:none' : ''}">${DAYS[new Date(d).getDay()]}<br><span style="font-size:13px;color:var(--text)">${parseInt(dd)}</span></div>`;
+            });
+            // Assignment row
+            html += `<div class="week-row-lbl">Assignments</div>`;
+            days.forEach((d, i) => {
+                const picking = !!creatingAsgn;
+                html += `<div class="week-cell${picking ? ' picking-due' : ''}${i === 6 ? ' no-right' : ''}"
+      ondblclick="onCalDbl('${d}',false)"
+      onclick="onCalClick('${d}',false)">
+      ${asgnBarsForDay(d)}
+      ${picking ? `<div style="font-size:9px;text-align:center;color:var(--amber);margin-top:3px">click to set due</div>` : ''}
+    </div>`;
+            });
+            // Student rows
+            students.forEach(s => {
+                html += `<div class="week-row-lbl" title="${s}">${s}</div>`;
+                days.forEach((d, i) => {
+                    const val = attendance[s + '_' + d] || 'none';
+                    html += `<div class="week-cell${d === t ? ' today-cell' : ''}${i === 6 ? ' no-right' : ''}" style="text-align:center;vertical-align:middle">
+        <button class="att-btn ${val === 'present' ? 'att-present' : val === 'absent' ? 'att-absent' : ''}"
+          onclick="event.stopPropagation();toggleAtt('${s}','${d}')">${val === 'present' ? 'P' : val === 'absent' ? 'A' : '&#8212;'}</button>
+      </div>`;
+                });
+            });
+            html += '</div>';
+            document.getElementById('cal-body').innerHTML = html;
+        }
+
+        // ── Calendar click handlers ───────────────────────────────────────────
+        function onCalDbl(date, isOther) {
+            if (isOther) return;
+            if (creatingAsgn) return; // already picking due date
+            creatingAsgn = { start: date };
+            openModal(date);
+            renderCal();
+        }
+
+        function onCalClick(date, isOther) {
+            if (!creatingAsgn || isOther) return;
+            if (date < creatingAsgn.start) { showToast('Due date must be on or after the assigned date'); return; }
+            // Set due date in modal
+            document.getElementById('modal-due').value = date;
+            document.getElementById('modal-hint').textContent = 'Due date set to ' + fmt(date) + '. Enter a name and save.';
+            document.getElementById('modal-hint').className = 'modal-hint ready';
+            document.getElementById('modal-save-btn').disabled = false;
+            renderCal();
+        }
+
+        // ── Modal ─────────────────────────────────────────────────────────────
+        function openModal(startDate) {
+            document.getElementById('modal-start').value = startDate;
+            document.getElementById('modal-due').value = '';
+            document.getElementById('modal-name').value = '';
+            document.getElementById('modal-title').textContent = 'New assignment — starts ' + fmt(startDate);
+            document.getElementById('modal-hint').textContent = 'Click any day on the calendar to set the due date.';
+            document.getElementById('modal-hint').className = 'modal-hint';
+            document.getElementById('modal-save-btn').disabled = true;
+            document.getElementById('modal').style.display = 'flex';
+            setTimeout(() => document.getElementById('modal-name').focus(), 60);
+        }
+
+        function cancelModal() {
+            creatingAsgn = null;
+            document.getElementById('modal').style.display = 'none';
+            renderCal();
+        }
+
+        function saveModal() {
+            const name = document.getElementById('modal-name').value.trim();
+            const date = document.getElementById('modal-start').value;
+            const due = document.getElementById('modal-due').value;
+            if (!name) { showToast('Enter an assignment name'); document.getElementById('modal-name').focus(); return; }
+            if (!due) { showToast('Click a due date on the calendar first'); return; }
+            assignments.push({ id: Date.now(), name, date, due });
+            creatingAsgn = null;
+            document.getElementById('modal').style.display = 'none';
+            renderCal();
+            renderAssignments();
+            showToast('"' + name + '" added');
+        }
+
+        // ── Attendance ────────────────────────────────────────────────────────
+        function shiftDate(n) { document.getElementById('att-date').value = addDays(document.getElementById('att-date').value || today(), n); renderAttGrid(); }
+        function goToday() { document.getElementById('att-date').value = today(); renderAttGrid(); }
+
+        function renderAttGrid() {
+            const d = document.getElementById('att-date').value || today();
+            const el = document.getElementById('att-grid');
+            if (!students.length) { el.innerHTML = '<p class="empty">Add students in the Students tab first.</p>'; return; }
+            const dayAsgns = assignments.filter(a => a.date === d);
+            const dayDue = assignments.filter(a => a.due === d);
+            let badges = '';
+            dayAsgns.forEach(a => badges += `<span class="badge badge-blue" style="margin:2px">X ${a.name} assigned</span>`);
+            dayDue.forEach(a => badges += `<span class="badge badge-amber" style="margin:2px">O ${a.name} due</span>`);
+            const present = students.filter(s => attendance[s + '_' + d] === 'present').length;
+            const absent = students.filter(s => attendance[s + '_' + d] === 'absent').length;
+            const unmarked = students.length - present - absent;
+            let html = `<div style="margin-bottom:12px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+    <span style="font-size:13px;font-weight:600;font-family:DM Mono,monospace">${fmt(d)}</span>${badges}</div>`;
+            html += `<div class="stat-grid" style="margin-bottom:1rem">
+    <div class="stat"><div class="stat-num" style="color:var(--green)">${present}</div><div class="stat-lbl">Present</div></div>
+    <div class="stat"><div class="stat-num" style="color:var(--red)">${absent}</div><div class="stat-lbl">Absent</div></div>
+    <div class="stat"><div class="stat-num" style="color:var(--text3)">${unmarked}</div><div class="stat-lbl">Not marked</div></div>
+  </div>`;
+            html += `<table><thead><tr><th>Student</th><th style="text-align:center;width:80px">Attendance</th><th>All makeup work</th></tr></thead><tbody>`;
+            students.forEach(s => {
+                const val = attendance[s + '_' + d] || 'none';
+                const notes = getAllMakeupBadges(s);
+                html += `<tr>
+      <td class="name-cell">${s}</td>
+      <td style="text-align:center">
+        <button class="att-btn ${val === 'present' ? 'att-present' : val === 'absent' ? 'att-absent' : ''}"
+          onclick="toggleAtt('${s}','${d}')">${val === 'present' ? 'P' : val === 'absent' ? 'A' : '&#8212;'}</button>
+      </td>
+      <td style="font-size:12px">${notes || '<span style="color:var(--text3)">none</span>'}</td>
+    </tr>`;
+            });
+            html += `</tbody></table>`;
+            el.innerHTML = html;
+        }
+
+        function toggleAtt(s, d) {
+            const k = s + '_' + d, cur = attendance[k] || 'none';
+            attendance[k] = cur === 'none' ? 'present' : cur === 'present' ? 'absent' : 'none';
+            renderAttGrid();
+            if (document.getElementById('tab-calendar').classList.contains('active')) renderCal();
+        }
+
+        // ── Makeup logic ──────────────────────────────────────────────────────
+        function getAbsentDays(student, from, to) {
+            let count = 0, d = from;
+            while (d <= to) { if (attendance[student + '_' + d] === 'absent') count++; d = addDays(d, 1); }
+            return count;
+        }
+
+        function getMakeupDate(student, dueDate, absDays) {
+            let extra = absDays, d = addDays(dueDate, 1);
+            while (extra > 0) { if (attendance[student + '_' + d] !== 'absent') extra--; if (extra > 0) d = addDays(d, 1); }
+            return d;
+        }
+
+        // Returns ALL assignments the student has ANY absences for (across full assignment window)
+        function getAllMakeupBadges(student) {
+            return assignments.map(a => {
+                const abs = getAbsentDays(student, a.date, a.due);
+                if (abs < 1) return null;
+                const mu = getMakeupDate(student, a.due, abs);
+                return `<span class="badge badge-amber" style="margin:1px 2px">${a.name} &rarr; ${fmt(mu)}</span>`;
+            }).filter(Boolean).join(' ');
+        }
+
+        function renderMakeup() {
+            const el = document.getElementById('makeup-content');
+            if (!students.length || !assignments.length) {
+                el.innerHTML = '<div class="card"><p class="empty">Add students and assignments first.</p></div>'; return;
+            }
+            let html = '', anyMakeup = false;
+            students.forEach(s => {
+                const rows = [];
+                assignments.forEach(a => {
+                    const abs = getAbsentDays(s, a.date, a.due);
+                    if (abs > 0) rows.push({ a, abs, makeup: getMakeupDate(s, a.due, abs) });
+                });
+                if (rows.length) {
+                    anyMakeup = true;
+                    html += `<div class="card">
+        <div class="card-title">${s} &mdash; ${rows.length} makeup assignment${rows.length > 1 ? 's' : ''}</div>`;
+                    rows.forEach(r => {
+                        html += `<div class="makeup-item">
+          <span style="font-weight:500;font-size:13px;min-width:130px">${r.a.name}</span>
+          <span class="badge badge-red">${r.abs} day${r.abs > 1 ? 's' : ''} absent</span>
+          <span style="font-size:12px;color:var(--text2)">Assigned: <strong>${fmt(r.a.date)}</strong> &nbsp; Original due: <strong>${fmt(r.a.due)}</strong></span>
+          <span class="badge badge-amber">Makeup due: ${fmt(r.makeup)}</span>
+          <span style="font-size:11px;color:var(--text3)">(${r.abs} absent day${r.abs > 1 ? 's' : ''} + 1 grace day from return)</span>
+        </div>`;
+                    });
+                    html += `</div>`;
+                }
+            });
+            if (!anyMakeup) html = '<div class="card"><p class="empty">No makeup work needed &mdash; no absences overlap with any assignments.</p></div>';
+            el.innerHTML = html;
+        }
+
+        // ── Students ──────────────────────────────────────────────────────────
         function renderStudents() {
             const el = document.getElementById('student-list');
             if (!students.length) { el.innerHTML = '<p class="empty">No students yet.</p>'; return; }
-            el.innerHTML = `<table><thead><tr><th>Name</th><th>Attendance records</th><th></th></tr></thead><tbody>${students.map(s => {
-                const days = Object.keys(attendance).filter(k => k.startsWith(s + '_')).length;
-                return `<tr><td class="name-cell">${s}</td><td><span class="badge badge-gray">${days} days tracked</span></td>
+            el.innerHTML = `<table><thead><tr><th>Name</th><th>Days marked</th><th></th></tr></thead><tbody>${students.map(s => {
+                const n = Object.keys(attendance).filter(k => k.startsWith(s + '_') && attendance[k] !== 'none').length;
+                return `<tr><td class="name-cell">${s}</td><td><span class="badge badge-gray">${n} days</span></td>
         <td style="text-align:right"><button class="btn sm danger" onclick="removeStudent('${s}')">Remove</button></td></tr>`;
             }).join('')
                 }</tbody></table>`;
@@ -562,20 +1187,18 @@
         function addStudent() {
             const v = document.getElementById('new-student').value.trim().toLowerCase();
             if (!v || students.includes(v)) { showToast(v ? 'Student already exists' : 'Enter a name'); return; }
-            students.push(v);
-            document.getElementById('new-student').value = '';
-            renderStudents(); renderAttGrid();
-            showToast(`Added ${v}`);
+            students.push(v); document.getElementById('new-student').value = '';
+            renderStudents(); renderAttGrid(); showToast('Added ' + v);
         }
 
         function removeStudent(s) {
-            if (!confirm(`Remove ${s} and all their attendance data?`)) return;
+            if (!confirm('Remove ' + s + ' and all their attendance data?')) return;
             students = students.filter(x => x !== s);
             Object.keys(attendance).filter(k => k.startsWith(s + '_')).forEach(k => delete attendance[k]);
             renderStudents(); renderAttGrid();
         }
 
-        // ── Assignments ────────────────────────────────────────
+        // ── Assignments ───────────────────────────────────────────────────────
         function renderAssignments() {
             const el = document.getElementById('asgn-list');
             if (!assignments.length) { el.innerHTML = '<p class="empty">No assignments yet.</p>'; return; }
@@ -597,224 +1220,66 @@
             assignments.push({ id: Date.now(), name, date, due });
             document.getElementById('asgn-name').value = '';
             renderAssignments();
-            showToast(`Added "${name}"`);
+            if (document.getElementById('tab-calendar').classList.contains('active')) renderCal();
+            showToast('"' + name + '" added');
         }
 
         function removeAsgn(id) {
             assignments = assignments.filter(a => a.id !== id);
             renderAssignments();
+            if (document.getElementById('tab-calendar').classList.contains('active')) renderCal();
         }
 
-        // ── Attendance ─────────────────────────────────────────
-        function shiftDate(n) {
-            const d = document.getElementById('att-date').value || today();
-            document.getElementById('att-date').value = addDays(d, n);
-            renderAttGrid();
-        }
-        function goToday() { document.getElementById('att-date').value = today(); renderAttGrid(); }
-
-        function renderAttGrid() {
-            const d = document.getElementById('att-date').value || today();
-            const el = document.getElementById('att-grid');
-            if (!students.length) { el.innerHTML = '<p class="empty">Add students in the Students tab first.</p>'; return; }
-
-            const dayAsgns = assignments.filter(a => a.date === d);
-            const dayDue = assignments.filter(a => a.due === d);
-
-            let badges = '';
-            dayAsgns.forEach(a => badges += `<span class="badge badge-blue" style="margin:2px">X ${a.name} assigned</span>`);
-            dayDue.forEach(a => badges += `<span class="badge badge-amber" style="margin:2px">O ${a.name} due</span>`);
-
-            let html = `<div style="margin-bottom:12px;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-    <span style="font-size:13px;font-weight:600;font-family:DM Mono,monospace">${fmt(d) || 'Select a date'}</span>${badges}
-  </div>`;
-
-            const present = students.filter(s => attendance[s + '_' + d] === 'present').length;
-            const absent = students.filter(s => attendance[s + '_' + d] === 'absent').length;
-            const unmarked = students.length - present - absent;
-
-            html += `<div class="stat-grid" style="margin-bottom:1rem">
-    <div class="stat"><div class="stat-num" style="color:var(--green)">${present}</div><div class="stat-lbl">Present</div></div>
-    <div class="stat"><div class="stat-num" style="color:var(--red)">${absent}</div><div class="stat-lbl">Absent</div></div>
-    <div class="stat"><div class="stat-num" style="color:var(--text3)">${unmarked}</div><div class="stat-lbl">Not marked</div></div>
-  </div>`;
-
-            html += `<table><thead><tr><th>Student</th><th style="text-align:center;width:100px">Attendance</th><th>Makeup note</th></tr></thead><tbody>`;
-            students.forEach(s => {
-                const key = s + '_' + d;
-                const val = attendance[key] || 'none';
-                const note = getMakeupNote(s, d);
-                html += `<tr>
-      <td class="name-cell">${s}</td>
-      <td style="text-align:center">
-        <button class="att-btn ${val === 'present' ? 'att-present' : val === 'absent' ? 'att-absent' : ''}"
-          onclick="toggleAtt('${s}','${d}')">${val === 'present' ? 'P' : val === 'absent' ? 'A' : '—'}</button>
-      </td>
-      <td style="font-size:12px;color:var(--text2)">${note}</td>
-    </tr>`;
-            });
-            html += `</tbody></table>`;
-            el.innerHTML = html;
-        }
-
-        function toggleAtt(s, d) {
-            const k = s + '_' + d;
-            const cur = attendance[k] || 'none';
-            attendance[k] = cur === 'none' ? 'present' : cur === 'present' ? 'absent' : 'none';
-            renderAttGrid();
-        }
-
-        // ── Makeup logic ───────────────────────────────────────
-        function getAbsentDays(student, from, to) {
-            let count = 0, d = from;
-            while (d <= to) { if (attendance[student + '_' + d] === 'absent') count++; d = addDays(d, 1); }
-            return count;
-        }
-
-        function getMakeupDate(student, dueDate, absDays) {
-            let extra = absDays, d = addDays(dueDate, 1);
-            while (extra > 0) {
-                if (attendance[student + '_' + d] !== 'absent') extra--;
-                if (extra > 0) d = addDays(d, 1);
-            }
-            return d;
-        }
-
-        function getMakeupNote(student, date) {
-            return assignments
-                .filter(a => a.date <= date && a.due >= date)
-                .map(a => {
-                    const abs = getAbsentDays(student, a.date, date);
-                    if (abs > 0) return `Makeup "${a.name}" by ${fmt(getMakeupDate(student, a.due, abs))}`;
-                    return null;
-                }).filter(Boolean).join(' | ');
-        }
-
-        function renderMakeup() {
-            const el = document.getElementById('makeup-content');
-            if (!students.length || !assignments.length) {
-                el.innerHTML = '<div class="card"><p class="empty">Add students and assignments first.</p></div>'; return;
-            }
-            let html = '';
-            let anyMakeup = false;
-            students.forEach(s => {
-                const rows = [];
-                assignments.forEach(a => {
-                    const abs = getAbsentDays(s, a.date, a.due);
-                    if (abs > 0) rows.push({ a, abs, makeup: getMakeupDate(s, a.due, abs) });
-                });
-                if (rows.length) {
-                    anyMakeup = true;
-                    html += `<div class="card"><div class="card-title">${s}</div>`;
-                    rows.forEach(r => {
-                        html += `<div class="makeup-item">
-          <span style="font-weight:500;font-size:13px;min-width:100px">${r.a.name}</span>
-          <span class="badge badge-red">${r.abs} day${r.abs > 1 ? 's' : ''} absent</span>
-          <span style="font-size:12px;color:var(--text2)">Original due: <strong>${fmt(r.a.due)}</strong></span>
-          <span class="badge badge-amber">Makeup due: ${fmt(r.makeup)}</span>
-          <span style="font-size:11px;color:var(--text3)">(${r.abs} absent + 1 grace day)</span>
-        </div>`;
-                    });
-                    html += '</div>';
-                }
-            });
-            if (!anyMakeup) html = '<div class="card"><p class="empty">No makeup work needed — no absences overlap with any assignments.</p></div>';
-            el.innerHTML = html;
-        }
-
-        // ── CSV Export ─────────────────────────────────────────
+        // ── CSV ───────────────────────────────────────────────────────────────
         function exportCSV() {
-            let csv = '';
-
-            // Section 1: students
-            csv += 'STUDENTS\n';
-            csv += students.join(',') + '\n\n';
-
-            // Section 2: assignments
-            csv += 'ASSIGNMENTS\n';
-            csv += 'id,name,date,due\n';
+            let csv = 'STUDENTS\n' + students.join(',') + '\n\nASSIGNMENTS\nid,name,date,due\n';
             assignments.forEach(a => csv += `${a.id},"${a.name}",${a.date},${a.due}\n`);
-            csv += '\n';
-
-            // Section 3: attendance
-            csv += 'ATTENDANCE\n';
-            csv += 'student,date,status\n';
+            csv += '\nATTENDANCE\nstudent,date,status\n';
             Object.entries(attendance).forEach(([k, v]) => {
                 if (v === 'none') return;
-                const [student, ...rest] = k.split('_');
-                const date = rest.join('_');
-                csv += `${student},${date},${v}\n`;
+                const [student, ...rest] = k.split('_'); csv += `${student},${rest.join('_')},${v}\n`;
             });
-
-            const blob = new Blob([csv], { type: 'text/csv' });
             const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `classroom_data_${today()}.csv`;
-            a.click();
+            a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
+            a.download = `classroom_data_${today()}.csv`; a.click();
             showToast('CSV downloaded!');
         }
 
-        // ── CSV Import ─────────────────────────────────────────
         function importCSV(event) {
-            const file = event.target.files[0];
-            if (!file) return;
+            const file = event.target.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = e => {
                 try {
                     const lines = e.target.result.split('\n').map(l => l.trim()).filter(l => l);
-                    let mode = '';
-                    const newStudents = [], newAssignments = [], newAttendance = {};
-
+                    let mode = ''; const ns = [], na = [], natt = {};
                     for (const line of lines) {
                         if (line === 'STUDENTS') { mode = 'students'; continue; }
                         if (line === 'ASSIGNMENTS') { mode = 'assignments'; continue; }
                         if (line === 'ATTENDANCE') { mode = 'attendance'; continue; }
                         if (line === 'id,name,date,due' || line === 'student,date,status') continue;
-                        if (!line) continue;
-
-                        if (mode === 'students') {
-                            line.split(',').map(s => s.trim()).filter(Boolean).forEach(s => newStudents.push(s));
-                        } else if (mode === 'assignments') {
-                            const [id, name, date, due] = parseCSVLine(line);
-                            if (id && name && date && due) newAssignments.push({ id: Number(id), name, date, due });
-                        } else if (mode === 'attendance') {
-                            const [student, date, status] = line.split(',');
-                            if (student && date && status) newAttendance[student + '_' + date] = status.trim();
-                        }
+                        if (mode === 'students') line.split(',').map(s => s.trim()).filter(Boolean).forEach(s => ns.push(s));
+                        else if (mode === 'assignments') { const [id, name, date, due] = parseCSVLine(line); if (id && name && date && due) na.push({ id: Number(id), name, date, due }); }
+                        else if (mode === 'attendance') { const [student, date, status] = line.split(','); if (student && date && status) natt[student + '_' + date] = status.trim(); }
                     }
-
-                    if (newStudents.length) {
-                        students = newStudents;
-                        assignments = newAssignments;
-                        attendance = newAttendance;
-                        renderAttGrid();
-                        showToast(`Imported: ${students.length} students, ${assignments.length} assignments`);
-                    } else {
-                        showToast('Could not read CSV — check file format');
-                    }
-                } catch (err) { showToast('Error reading CSV file'); }
+                    if (ns.length) { students = ns; assignments = na; attendance = natt; renderAttGrid(); renderCal(); showToast(`Imported: ${ns.length} students, ${na.length} assignments`); }
+                    else showToast('Could not read CSV');
+                } catch (e) { showToast('Error reading CSV'); }
             };
-            reader.readAsText(file);
-            event.target.value = '';
+            reader.readAsText(file); event.target.value = '';
         }
 
         function parseCSVLine(line) {
-            const result = [];
-            let cur = '', inQuote = false;
-            for (const ch of line) {
-                if (ch === '"') { inQuote = !inQuote; }
-                else if (ch === ',' && !inQuote) { result.push(cur); cur = ''; }
-                else cur += ch;
-            }
-            result.push(cur);
-            return result;
+            const r = []; let cur = '', inQ = false;
+            for (const ch of line) { if (ch === '"') { inQ = !inQ; } else if (ch === ',' && !inQ) { r.push(cur); cur = ''; } else cur += ch; }
+            r.push(cur); return r;
         }
 
-        // ── Init ───────────────────────────────────────────────
+        // ── Init ──────────────────────────────────────────────────────────────
         document.getElementById('att-date').value = today();
         document.getElementById('asgn-date').value = today();
         document.getElementById('asgn-due').value = addDays(today(), 7);
         renderAttGrid();
+        renderCal();
     </script>
 </body>
 
