@@ -167,6 +167,7 @@
 
         input[type=text],
         input[type=date],
+        input[type=number],
         select {
             height: 36px;
             padding: 0 10px;
@@ -181,7 +182,8 @@
         }
 
         input[type=text]:focus,
-        input[type=date]:focus {
+        input[type=date]:focus,
+        input[type=number]:focus {
             border-color: var(--accent);
             background: var(--surface);
         }
@@ -470,6 +472,14 @@
             background: #f0f4ff;
         }
 
+        .cal-cell.weekend-cell {
+            background: #faf9f5;
+        }
+
+        .cal-cell.holiday-cell {
+            background: #fff5f5;
+        }
+
         .cal-cell.picking-due:hover {
             background: #fffbf0 !important;
             outline: 2px dashed var(--amber);
@@ -569,6 +579,18 @@
             pointer-events: none;
         }
 
+        .holiday-label {
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--red);
+            background: var(--red-bg);
+            border-radius: 3px;
+            padding: 0 3px;
+            position: absolute;
+            top: 4px;
+            right: 4px;
+        }
+
         /* week view */
         .week-grid {
             display: grid;
@@ -631,6 +653,54 @@
             border-right: none;
         }
 
+        /* ── Collapsible makeup sections ── */
+        .makeup-student-section {
+            margin-bottom: 1rem;
+        }
+
+        .makeup-student-section summary {
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text2);
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            padding: 10px 0;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .makeup-student-section summary::before {
+            content: '▸';
+            font-size: 14px;
+            transition: transform .2s;
+            display: inline-block;
+        }
+
+        .makeup-student-section[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        .makeup-student-section summary::-webkit-details-marker {
+            display: none;
+        }
+
+        /* grading select */
+        .grade-select {
+            height: 28px;
+            padding: 0 6px;
+            font-size: 11px;
+            font-family: inherit;
+            border: 1px solid var(--border2);
+            border-radius: var(--radius);
+            background: var(--bg);
+            color: var(--text);
+            outline: none;
+            cursor: pointer;
+        }
+
         /* modal */
         .modal-overlay {
             position: fixed;
@@ -680,6 +750,83 @@
             margin-top: 1.25rem;
         }
 
+        /* auto-load banner */
+        .auto-load-banner {
+            position: fixed;
+            top: 64px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--green-bg);
+            color: var(--green);
+            border: 1px solid var(--green-bd);
+            border-radius: var(--radius-lg);
+            padding: 10px 20px;
+            font-size: 13px;
+            font-weight: 500;
+            z-index: 9999;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, .08);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideDown .3s ease;
+        }
+
+        .auto-load-banner button {
+            background: none;
+            border: none;
+            color: var(--green);
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 0 4px;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateX(-50%) translateY(-20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* holiday config panel */
+        .holiday-panel {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .holiday-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: var(--red-bg);
+            color: var(--red);
+            border: 1px solid var(--red-bd);
+            border-radius: 99px;
+            padding: 3px 10px;
+            font-size: 12px;
+            font-weight: 500;
+            margin: 2px;
+        }
+
+        .holiday-tag button {
+            background: none;
+            border: none;
+            color: var(--red);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 0 2px;
+            line-height: 1;
+        }
+
         @media(max-width:700px) {
             .main {
                 padding: 1rem;
@@ -693,6 +840,7 @@
                 min-height: 70px;
             }
         }
+
         .help-btn {
             position: fixed;
             bottom: 24px;
@@ -789,6 +937,17 @@
             line-height: 1.5;
             color: var(--text2);
         }
+
+        /* Rename modal */
+        .rename-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .4);
+            z-index: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
     </style>
 </head>
 
@@ -797,7 +956,7 @@
     <header>
         <div class="logo">Classroom <span>Tracker</span></div>
         <div class="header-actions">
-            <button class="btn info sm" onclick="exportCSV()">⬇ Download CSV</button>
+            <button class="btn info sm" onclick="openRenameModal()">⬇ Download CSV</button>
             <label class="btn sm" style="cursor:pointer;display:flex;align-items:center;">
                 ⬆ Import CSV
                 <input type="file" accept=".csv" style="display:none" onchange="importCSV(event)">
@@ -812,6 +971,7 @@
             <button class="tab" onclick="switchTab('assignments')">Assignments</button>
             <button class="tab" onclick="switchTab('makeup')">Makeup work</button>
             <button class="tab" onclick="switchTab('students')">Students</button>
+            <button class="tab" onclick="switchTab('holidays')">Holidays</button>
         </div>
 
         <!-- CALENDAR TAB -->
@@ -837,6 +997,10 @@
                     &nbsp;&middot;&nbsp;
                     <span style="color:var(--green)">&#9679;</span> present &nbsp;
                     <span style="color:var(--red)">&#9679;</span> absent
+                    &nbsp;&middot;&nbsp;
+                    <span
+                        style="color:var(--red);font-size:9px;font-weight:600;background:var(--red-bg);padding:1px 4px;border-radius:3px">H</span>
+                    holiday
                 </div>
             </div>
             <div class="card" style="padding:.75rem 1rem">
@@ -901,6 +1065,29 @@
                 <div id="student-list"></div>
             </div>
         </div>
+
+        <!-- HOLIDAYS TAB -->
+        <div id="tab-holidays" class="section">
+            <div class="card">
+                <div class="card-title">Manage Holidays & Non-School Days</div>
+                <p style="font-size:12px;color:var(--text2);margin-bottom:12px">
+                    Add dates when school is closed (holidays, breaks, snow days). Makeup due dates will skip these days
+                    and all weekends automatically.
+                </p>
+                <div class="form-row" style="margin-bottom:12px">
+                    <div class="form-group" style="max-width:200px">
+                        <label>Holiday date</label>
+                        <input type="date" id="holiday-date">
+                    </div>
+                    <div class="form-group">
+                        <label>Label (optional)</label>
+                        <input type="text" id="holiday-label" placeholder="e.g. Spring Break, Snow Day...">
+                    </div>
+                    <button class="btn primary" onclick="addHoliday()">Add Holiday</button>
+                </div>
+                <div id="holiday-list"></div>
+            </div>
+        </div>
     </div>
 
     <!-- MODAL -->
@@ -932,6 +1119,21 @@
         </div>
     </div>
 
+    <!-- RENAME MODAL for CSV download -->
+    <div class="rename-overlay" id="rename-modal" style="display:none">
+        <div class="modal">
+            <div class="modal-title">Download CSV</div>
+            <div class="form-group" style="margin-bottom:12px">
+                <label>File name</label>
+                <input type="text" id="rename-input" placeholder="classroom_data.csv">
+            </div>
+            <div class="modal-actions">
+                <button class="btn" onclick="closeRenameModal()">Cancel</button>
+                <button class="btn primary" onclick="confirmDownload()">Download</button>
+            </div>
+        </div>
+    </div>
+
     <button id="help-btn" class="help-btn" onclick="openHelp()" title="How to use">&#63;</button>
 
     <div class="help-overlay" id="help-overlay" onclick="closeHelp(event)">
@@ -944,66 +1146,107 @@
                 <!-- Step 1 -->
                 <div class="help-step">
                     <div class="help-step-img" style="background:#e8f0fd">
-                         <div style="background:var(--surface);padding:10px;border-radius:var(--radius);border:1px solid var(--blue-bd);min-width:200px">
-                             <div style="font-size:12px;font-weight:600;margin-bottom:8px">Students Tab</div>
-                             <div style="display:flex;gap:5px"><input type="text" value="Alice" readonly style="height:28px;flex:1;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:0 8px;color:var(--text)"><button class="btn primary sm" style="height:28px" disabled>Add</button></div>
-                         </div>
+                        <div
+                            style="background:var(--surface);padding:10px;border-radius:var(--radius);border:1px solid var(--blue-bd);min-width:200px">
+                            <div style="font-size:12px;font-weight:600;margin-bottom:8px">Students Tab</div>
+                            <div style="display:flex;gap:5px"><input type="text" value="Alice" readonly
+                                    style="height:28px;flex:1;background:var(--bg);border:1px solid var(--border);border-radius:4px;padding:0 8px;color:var(--text)"><button
+                                    class="btn primary sm" style="height:28px" disabled>Add</button></div>
+                        </div>
                     </div>
                     <div class="help-step-text">
                         <h3>1. Add Students</h3>
-                        <p>Go to the <strong>Students</strong> tab to build your roster. Enter names one by one, or import them via CSV. All attendance tracking relies on having your students set up first.</p>
+                        <p>Go to the <strong>Students</strong> tab to build your roster. Enter names one by one, or
+                            import them via CSV. All attendance tracking relies on having your students set up first.
+                        </p>
                     </div>
                 </div>
 
                 <!-- Step 2 -->
                 <div class="help-step">
                     <div class="help-step-img" style="background:#fcfbed">
-                         <div class="week-grid" style="grid-template-columns: repeat(2, 1fr); width: 220px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border); background: var(--surface); border-radius: var(--radius); pointer-events:none;">
-                              <div class="week-hdr">Tue</div><div class="week-hdr" style="border-right:none">Wed</div>
-                              <div class="week-cell picking-due" style="height:50px"><div class="cal-asgn-bar cal-asgn-start">X Essay</div></div>
-                              <div class="week-cell" style="height:50px;border-right:none"><div class="pick-hint" style="color:var(--amber);text-align:center;font-size:10px;margin-top:4px">click to set due</div></div>
+                        <div class="week-grid"
+                            style="grid-template-columns: repeat(2, 1fr); width: 220px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); border: 1px solid var(--border); background: var(--surface); border-radius: var(--radius); pointer-events:none;">
+                            <div class="week-hdr">Tue</div>
+                            <div class="week-hdr" style="border-right:none">Wed</div>
+                            <div class="week-cell picking-due" style="height:50px">
+                                <div class="cal-asgn-bar cal-asgn-start">X Essay</div>
+                            </div>
+                            <div class="week-cell" style="height:50px;border-right:none">
+                                <div class="pick-hint"
+                                    style="color:var(--amber);text-align:center;font-size:10px;margin-top:4px">click to
+                                    set due</div>
+                            </div>
                         </div>
                     </div>
                     <div class="help-step-text">
                         <h3>2. Create Assignments the Fast Way</h3>
-                        <p>In the Calendar view: <strong style="color:var(--blue)">Double-click</strong> any day to assign work on that day. Then, <strong style="color:var(--amber)">Single-click</strong> a future day to set the due date. The assignment menu will immediately open, pre-filled with your selected dates!</p>
+                        <p>In the Calendar view: <strong style="color:var(--blue)">Double-click</strong> any day to
+                            assign work on that day. Then, <strong style="color:var(--amber)">Single-click</strong> a
+                            future day to set the due date. The assignment menu will immediately open, pre-filled with
+                            your selected dates!</p>
                     </div>
                 </div>
 
                 <!-- Step 3 -->
                 <div class="help-step">
                     <div class="help-step-img" style="background:#f0efe9">
-                         <table style="width:240px; background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); box-shadow:0 4px 12px rgba(0,0,0,.05); pointer-events:none; border-collapse:collapse;">
-                              <thead><tr><th style="padding:8px;font-size:12px;color:var(--text2)">Student</th><th style="padding:8px;text-align:center;font-size:12px;color:var(--text2)">Attendance</th></tr></thead>
-                              <tbody>
-                                <tr><td style="padding:8px;border-top:1px solid var(--border);font-size:13px">ruby</td><td style="padding:8px;text-align:center;border-top:1px solid var(--border)"><button class="att-btn att-absent">A</button></td></tr>
-                                <tr><td style="padding:8px;border-top:1px solid var(--border);font-size:13px">emerald</td><td style="padding:8px;text-align:center;border-top:1px solid var(--border)"><button class="att-btn att-present">P</button></td></tr>
-                              </tbody>
+                        <table
+                            style="width:240px; background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); box-shadow:0 4px 12px rgba(0,0,0,.05); pointer-events:none; border-collapse:collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="padding:8px;font-size:12px;color:var(--text2)">Student</th>
+                                    <th style="padding:8px;text-align:center;font-size:12px;color:var(--text2)">
+                                        Attendance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding:8px;border-top:1px solid var(--border);font-size:13px">ruby</td>
+                                    <td style="padding:8px;text-align:center;border-top:1px solid var(--border)"><button
+                                            class="att-btn att-absent">A</button></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px;border-top:1px solid var(--border);font-size:13px">emerald
+                                    </td>
+                                    <td style="padding:8px;text-align:center;border-top:1px solid var(--border)"><button
+                                            class="att-btn att-present">P</button></td>
+                                </tr>
+                            </tbody>
                         </table>
                     </div>
                     <div class="help-step-text">
                         <h3>3. Take Attendance</h3>
-                        <p>Go to the <strong>Attendance</strong> tab, select today's date, and click the blank button next to a student to cycle their attendance to <strong>P</strong> (Present) or <strong>A</strong> (Absent).</p>
+                        <p>Go to the <strong>Attendance</strong> tab, select today's date, and click the blank button
+                            next to a student to cycle their attendance to <strong>P</strong> (Present) or
+                            <strong>A</strong> (Absent).
+                        </p>
                     </div>
                 </div>
 
                 <!-- Step 4 -->
                 <div class="help-step">
                     <div class="help-step-img" style="background:#fffcf0">
-                         <div class="makeup-item" style="width:280px; box-shadow:0 4px 12px rgba(0,0,0,.05); border:1px solid var(--border); background:var(--surface); border-radius:var(--radius); padding:10px; pointer-events:none;">
-                           <div style="flex:1">
-                             <div style="margin-bottom:6px">
-                               <span style="font-weight:600;font-size:14px;margin-right:8px">Essay 1</span>
-                               <span class="badge badge-amber">Makeup due: 04/16</span>
-                             </div>
-                             <div style="font-size:12px;color:var(--text2)"><span class="badge badge-gray">1 day absent</span></div>
-                           </div>
-                           <button class="btn sm primary" style="margin-top:10px">Mark Complete</button>
+                        <div class="makeup-item"
+                            style="width:280px; box-shadow:0 4px 12px rgba(0,0,0,.05); border:1px solid var(--border); background:var(--surface); border-radius:var(--radius); padding:10px; pointer-events:none;">
+                            <div style="flex:1">
+                                <div style="margin-bottom:6px">
+                                    <span style="font-weight:600;font-size:14px;margin-right:8px">Essay 1</span>
+                                    <span class="badge badge-amber">Makeup due: 04/16</span>
+                                </div>
+                                <div style="font-size:12px;color:var(--text2)"><span class="badge badge-gray">1 day
+                                        absent → 2 school days extension</span></div>
+                            </div>
+                            <button class="btn sm primary" style="margin-top:10px">Mark Complete</button>
                         </div>
                     </div>
                     <div class="help-step-text">
                         <h3>4. Manage Makeup Work</h3>
-                        <p>The system automatically tracks missing work! If a student is marked Absent during an assignment's active window, the <strong>Makeup Work</strong> tab will calculate a new extended "Makeup Due Date" based on how many days they missed. Once they submit it, click "Mark Complete" to clear it.</p>
+                        <p>The system automatically tracks missing work! If a student is marked Absent during an
+                            assignment's active window, the <strong>Makeup Work</strong> tab will calculate a new
+                            extended "Makeup Due Date" — <strong>each absent day gives 2 school days</strong> of
+                            extension (skipping weekends and holidays). Once they submit it, click
+                            "Mark Complete" to clear it.</p>
                     </div>
                 </div>
             </div>
@@ -1018,29 +1261,108 @@
         let assignments = [];
         let attendance = {};
         let makeupCompleted = {};
+        let holidays = [
+            { date: '2026-01-01', label: "New Year's Day" },
+            { date: '2026-01-19', label: "Martin Luther King Jr. Day" },
+            { date: '2026-02-16', label: "Presidents' Day" },
+            { date: '2026-05-25', label: "Memorial Day" },
+            { date: '2026-06-19', label: "Juneteenth" },
+            { date: '2026-07-04', label: "Independence Day" },
+            { date: '2026-09-07', label: "Labor Day" },
+            { date: '2026-10-12', label: "Columbus Day" },
+            { date: '2026-11-11', label: "Veterans Day" },
+            { date: '2026-11-26', label: "Thanksgiving Day" },
+            { date: '2026-12-25', label: "Christmas Day" }
+        ];
+        let grading = {}; // { student_asgnId: 'not_graded'|'complete'|'incomplete'|'missing' }
 
         let calView = 'month';
         let calAnchor = new Date();
         let creatingAsgn = null; // {start: 'YYYY-MM-DD'} while picking due date
+        let lastAction = 'edit'; // 'edit' or 'download'
 
         // ── Utilities ─────────────────────────────────────────────────────────
         const fmt = d => { if (!d) return ''; const [y, m, dd] = d.split('-'); return `${m}/${dd}/${y}`; };
         const localDate = s => { const [y, m, d] = s.split('-'); return new Date(y, m - 1, d); };
-        const today = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
-        const isoDate = d => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+        const today = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+        const isoDate = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
         const addDays = (s, n) => { const d = localDate(s); d.setDate(d.getDate() + n); return isoDate(d); };
         const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+        // Check if a date is a weekend (Sat=6, Sun=0)
+        function isWeekend(dateStr) {
+            const d = localDate(dateStr);
+            const dow = d.getDay();
+            return dow === 0 || dow === 6;
+        }
+
+        // Check if a date is a holiday
+        function isHoliday(dateStr) {
+            return holidays.some(h => h.date === dateStr);
+        }
+
+        // Check if a date is a school day (not weekend, not holiday)
+        function isSchoolDay(dateStr) {
+            return !isWeekend(dateStr) && !isHoliday(dateStr);
+        }
+
+        // Get the holiday label for a date (if any)
+        function getHolidayLabel(dateStr) {
+            const h = holidays.find(h => h.date === dateStr);
+            return h ? (h.label || 'Holiday') : null;
+        }
 
         function showToast(msg) {
             const t = document.getElementById('toast'); t.textContent = msg;
             t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2600);
         }
 
+        function markEdited() {
+            lastAction = 'edit';
+        }
+
+        // ── localStorage persistence ─────────────────────────────────────────
+        function saveState() {
+            const state = {
+                students,
+                assignments,
+                attendance,
+                makeupCompleted,
+                holidays,
+                grading
+            };
+            try {
+                localStorage.setItem('classroomTracker_data', JSON.stringify(state));
+            } catch (e) {
+                console.warn('Failed to save to localStorage:', e);
+            }
+        }
+
+        function loadState() {
+            try {
+                const raw = localStorage.getItem('classroomTracker_data');
+                if (!raw) return false;
+                const state = JSON.parse(raw);
+                if (state.students && state.students.length) {
+                    students = state.students;
+                    assignments = state.assignments || [];
+                    attendance = state.attendance || {};
+                    makeupCompleted = state.makeupCompleted || {};
+                    holidays = state.holidays || [];
+                    grading = state.grading || {};
+                    return true;
+                }
+            } catch (e) {
+                console.warn('Failed to load from localStorage:', e);
+            }
+            return false;
+        }
+
         // ── Tabs ──────────────────────────────────────────────────────────────
         function switchTab(name) {
             document.querySelectorAll('.tab').forEach((b, i) => {
-                b.classList.toggle('active', ['calendar', 'attendance', 'assignments', 'makeup', 'students'][i] === name);
+                b.classList.toggle('active', ['calendar', 'attendance', 'assignments', 'makeup', 'students', 'holidays'][i] === name);
             });
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById('tab-' + name).classList.add('active');
@@ -1048,6 +1370,9 @@
             if (name === 'students') renderStudents();
             if (name === 'assignments') renderAssignments();
             if (name === 'calendar') renderCal();
+            if (name === 'attendance') renderAttGrid();
+            if (name === 'holidays') renderHolidays();
+            saveState();
         }
 
         // ── Calendar view ─────────────────────────────────────────────────────
@@ -1056,6 +1381,7 @@
             document.getElementById('btn-week').classList.toggle('active-view', v === 'week');
             document.getElementById('btn-month').classList.toggle('active-view', v === 'month');
             renderCal();
+            saveState();
         }
 
         function calShift(n) {
@@ -1124,15 +1450,22 @@
                 const dd = parseInt(date.split('-')[2]);
                 const isToday = date === t;
                 const picking = creatingAsgn && !other;
+                const weekend = isWeekend(date);
+                const holiday = isHoliday(date);
+                const holidayLbl = getHolidayLabel(date);
                 let cls = 'cal-cell';
                 if (other) cls += ' other-month';
                 if (isToday) cls += ' today-cell';
+                else if (holiday && !other) cls += ' holiday-cell';
+                else if (weekend && !other) cls += ' weekend-cell';
                 if (picking) cls += ' picking-due';
                 const hint = picking ? `<div class="pick-hint">click to set due</div>` : '';
+                const holidayTag = (holiday && !other) ? `<div class="holiday-label" title="${holidayLbl}">H</div>` : '';
                 html += `<div class="${cls}"
       ondblclick="onCalDbl('${date}',${other})"
       onclick="onCalClick('${date}',${other})">
       <div class="cal-date-num">${dd}</div>
+      ${holidayTag}
       ${asgnBarsForDay(date)}
       ${other ? '' : attDotsForDay(date)}
       ${hint}
@@ -1163,7 +1496,9 @@
             html += `<div class="week-hdr">Student</div>`;
             days.forEach((d, i) => {
                 const [, m, dd] = d.split('-');
-                html += `<div class="week-hdr${d === t ? ' today-cell' : ''}" style="${i === 6 ? 'border-right:none' : ''}">${DAYS[i]}<br><span style="font-size:13px;color:var(--text)">${parseInt(dd)}</span></div>`;
+                const holiday = isHoliday(d);
+                const hLabel = getHolidayLabel(d);
+                html += `<div class="week-hdr${d === t ? ' today-cell' : ''}" style="${i === 6 ? 'border-right:none' : ''}">${DAYS[i]}<br><span style="font-size:13px;color:var(--text)">${parseInt(dd)}</span>${holiday ? `<br><span style="font-size:9px;color:var(--red);font-weight:600">H</span>` : ''}</div>`;
             });
             // Assignment row
             html += `<div class="week-row-lbl">Assignments</div>`;
@@ -1228,10 +1563,11 @@
             renderCal();
         }
 
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
             if (event.key === 'Escape') {
                 if (creatingAsgn) cancelModal();
                 if (document.getElementById('help-overlay').style.display === 'flex') closeHelp();
+                if (document.getElementById('rename-modal').style.display === 'flex') closeRenameModal();
             }
         });
 
@@ -1256,10 +1592,12 @@
             renderCal();
             renderAssignments();
             showToast('"' + name + '" added');
+            markEdited();
+            saveState();
         }
 
         // ── Attendance ────────────────────────────────────────────────────────
-        function shiftDate(n) { document.getElementById('att-date').value = addDays(document.getElementById('att-date').value || today(), n); renderAttGrid(); }
+        function shiftDate(n) { document.getElementById('att-date').value = addDays(document.getElementById('att-date').value || today(), n); renderAttGrid(); saveState(); }
         function goToday() { document.getElementById('att-date').value = today(); renderAttGrid(); }
 
         function renderAttGrid() {
@@ -1303,6 +1641,8 @@
             attendance[k] = cur === 'none' ? 'present' : cur === 'present' ? 'absent' : 'none';
             renderAttGrid();
             if (document.getElementById('tab-calendar').classList.contains('active')) renderCal();
+            markEdited();
+            saveState();
         }
 
         // ── Makeup logic ──────────────────────────────────────────────────────
@@ -1312,9 +1652,22 @@
             return count;
         }
 
+        // FEATURE 1+3: Skip weekends & holidays, and each absent day = 2 school days extension
         function getMakeupDate(student, dueDate, absDays) {
-            let extra = absDays, d = addDays(dueDate, 1);
-            while (extra > 0) { if (attendance[student + '_' + d] !== 'absent') extra--; if (extra > 0) d = addDays(d, 1); }
+            let schoolDaysToAdd = absDays * 2; // 1 absent day = 2 school days extension
+            let d = addDays(dueDate, 1);
+            while (schoolDaysToAdd > 0) {
+                if (isSchoolDay(d)) {
+                    schoolDaysToAdd--;
+                }
+                if (schoolDaysToAdd > 0) {
+                    d = addDays(d, 1);
+                }
+            }
+            // If we landed on a non-school day, advance to next school day
+            while (!isSchoolDay(d)) {
+                d = addDays(d, 1);
+            }
             return d;
         }
 
@@ -1330,6 +1683,7 @@
             }).filter(Boolean).join(' ');
         }
 
+        // FEATURE 4: Collapsible makeup sections - default closed if overdue
         function renderMakeup() {
             const el = document.getElementById('makeup-content');
             if (!students.length || !assignments.length) {
@@ -1344,15 +1698,34 @@
                 });
                 if (rows.length) {
                     anyMakeup = true;
+                    // Determine if all items are overdue or completed — if so, default to closed
+                    const allOverdueOrDone = rows.every(r => {
+                        const mKey = s + '_' + r.a.id;
+                        return makeupCompleted[mKey] || r.makeup < today();
+                    });
+                    const openAttr = allOverdueOrDone ? '' : ' open';
+                    const activeCount = rows.filter(r => !makeupCompleted[s + '_' + r.a.id] && r.makeup >= today()).length;
+                    const overdueCount = rows.filter(r => !makeupCompleted[s + '_' + r.a.id] && r.makeup < today()).length;
+                    const doneCount = rows.filter(r => makeupCompleted[s + '_' + r.a.id]).length;
+
+                    let statusBadges = '';
+                    if (activeCount > 0) statusBadges += `<span class="badge badge-amber" style="margin-left:6px">${activeCount} active</span>`;
+                    if (overdueCount > 0) statusBadges += `<span class="badge badge-red" style="margin-left:6px">${overdueCount} overdue</span>`;
+                    if (doneCount > 0) statusBadges += `<span class="badge badge-green" style="margin-left:6px">${doneCount} done</span>`;
+
                     html += `<div class="card">
-        <div class="card-title">${s} &mdash; ${rows.length} makeup assignment${rows.length > 1 ? 's' : ''}</div>`;
+        <details class="makeup-student-section"${openAttr}>
+        <summary>${s} — ${rows.length} makeup assignment${rows.length > 1 ? 's' : ''} ${statusBadges}</summary>`;
                     rows.forEach(r => {
                         const mKey = s + '_' + r.a.id;
                         const isDone = makeupCompleted[mKey];
                         const isOverdue = !isDone && r.makeup < today();
                         let badgeStr = `<span class="badge ${isOverdue ? 'badge-red' : 'badge-amber'}">Makeup due: ${fmt(r.makeup)}</span>`;
-                         if (isDone) badgeStr = `<span class="badge badge-green">Completed</span>`;
-                        
+                        if (isDone) badgeStr = `<span class="badge badge-green">Completed</span>`;
+
+                        const gradeKey = s + '_' + r.a.id;
+                        const gradeVal = grading[gradeKey] || 'not_graded';
+
                         html += `<div class="makeup-item" style="display:flex;justify-content:space-between;align-items:center;${isDone ? 'opacity:0.6;background:var(--surface2)' : ''}">
           <div style="flex:1">
             <div style="margin-bottom:6px">
@@ -1361,17 +1734,33 @@
             </div>
             <div style="font-size:12px;color:var(--text2)">
               Assigned: <strong>${fmt(r.a.date)}</strong> &nbsp; Original due: <strong>${fmt(r.a.due)}</strong>
-              <span class="badge badge-gray" style="margin-left:8px">${r.abs} day${r.abs > 1 ? 's' : ''} absent</span>
+              <span class="badge badge-gray" style="margin-left:8px">${r.abs} day${r.abs > 1 ? 's' : ''} absent → ${r.abs * 2} school days extension</span>
+            </div>
+            <div style="margin-top:6px">
+              <label style="font-size:11px;margin-right:4px">Grade:</label>
+              <select class="grade-select" onchange="setGrade('${s}',${r.a.id},this.value)">
+                <option value="not_graded"${gradeVal === 'not_graded' ? ' selected' : ''}>Not Graded</option>
+                <option value="complete"${gradeVal === 'complete' ? ' selected' : ''}>Graded — Complete</option>
+                <option value="incomplete"${gradeVal === 'incomplete' ? ' selected' : ''}>Graded — Incomplete</option>
+                <option value="missing"${gradeVal === 'missing' ? ' selected' : ''}>Graded — Missing</option>
+              </select>
             </div>
           </div>
           <button class="btn sm ${isDone ? '' : 'primary'}" onclick="toggleMakeup('${s}', ${r.a.id})">${isDone ? 'Undo' : 'Mark Complete'}</button>
         </div>`;
                     });
-                    html += `</div>`;
+                    html += `</details></div>`;
                 }
             });
             if (!anyMakeup) html = '<div class="card"><p class="empty">No makeup work needed &mdash; no absences overlap with any assignments.</p></div>';
             el.innerHTML = html;
+        }
+
+        function setGrade(student, asgnId, value) {
+            const key = student + '_' + asgnId;
+            grading[key] = value;
+            markEdited();
+            saveState();
         }
 
         function toggleMakeup(s, id) {
@@ -1379,6 +1768,8 @@
             if (makeupCompleted[k]) delete makeupCompleted[k]; else makeupCompleted[k] = true;
             renderMakeup();
             if (document.getElementById('tab-attendance').classList.contains('active')) renderAttGrid();
+            markEdited();
+            saveState();
         }
 
         // ── Students ──────────────────────────────────────────────────────────
@@ -1398,6 +1789,8 @@
             if (!v || students.includes(v)) { showToast(v ? 'Student already exists' : 'Enter a name'); return; }
             students.push(v); document.getElementById('new-student').value = '';
             renderStudents(); renderAttGrid(); showToast('Added ' + v);
+            markEdited();
+            saveState();
         }
 
         function removeStudent(s) {
@@ -1405,6 +1798,8 @@
             students = students.filter(x => x !== s);
             Object.keys(attendance).filter(k => k.startsWith(s + '_')).forEach(k => delete attendance[k]);
             renderStudents(); renderAttGrid();
+            markEdited();
+            saveState();
         }
 
         // ── Assignments ───────────────────────────────────────────────────────
@@ -1431,16 +1826,88 @@
             renderAssignments();
             if (document.getElementById('tab-calendar').classList.contains('active')) renderCal();
             showToast('"' + name + '" added');
+            markEdited();
+            saveState();
         }
 
         function removeAsgn(id) {
             assignments = assignments.filter(a => a.id !== id);
             renderAssignments();
             if (document.getElementById('tab-calendar').classList.contains('active')) renderCal();
+            markEdited();
+            saveState();
+        }
+
+        // ── Holidays ──────────────────────────────────────────────────────────
+        function renderHolidays() {
+            const el = document.getElementById('holiday-list');
+            if (!holidays.length) {
+                el.innerHTML = '<p class="empty">No holidays configured. Weekends (Sat/Sun) are always skipped automatically.</p>';
+                return;
+            }
+            // Sort by date
+            const sorted = [...holidays].sort((a, b) => a.date.localeCompare(b.date));
+            let html = '<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">';
+            sorted.forEach(h => {
+                html += `<span class="holiday-tag">${fmt(h.date)}${h.label ? ' — ' + h.label : ''}<button onclick="removeHoliday('${h.date}')" title="Remove">&times;</button></span>`;
+            });
+            html += '</div>';
+            html += `<p style="font-size:11px;color:var(--text3);margin-top:8px">${holidays.length} holiday${holidays.length > 1 ? 's' : ''} configured. Weekends are always skipped.</p>`;
+            el.innerHTML = html;
+        }
+
+        function addHoliday() {
+            const date = document.getElementById('holiday-date').value;
+            const label = document.getElementById('holiday-label').value.trim();
+            if (!date) { showToast('Select a date'); return; }
+            if (holidays.some(h => h.date === date)) { showToast('Holiday already exists for this date'); return; }
+            holidays.push({ date, label: label || '' });
+            document.getElementById('holiday-date').value = '';
+            document.getElementById('holiday-label').value = '';
+            renderHolidays();
+            if (document.getElementById('tab-calendar').classList.contains('active')) renderCal();
+            showToast('Holiday added: ' + fmt(date));
+            markEdited();
+            saveState();
+        }
+
+        function removeHoliday(date) {
+            holidays = holidays.filter(h => h.date !== date);
+            renderHolidays();
+            if (document.getElementById('tab-calendar').classList.contains('active')) renderCal();
+            markEdited();
+            saveState();
         }
 
         // ── CSV ───────────────────────────────────────────────────────────────
-        function exportCSV() {
+        // FEATURE 7: Rename modal before download
+        function openRenameModal() {
+            const savedName = localStorage.getItem('classroomTracker_csvName') || `classroom_data_${today()}.csv`;
+            document.getElementById('rename-input').value = savedName;
+            document.getElementById('rename-modal').style.display = 'flex';
+            setTimeout(() => {
+                const input = document.getElementById('rename-input');
+                input.focus();
+                // Select filename without extension
+                const dotIdx = input.value.lastIndexOf('.');
+                if (dotIdx > 0) input.setSelectionRange(0, dotIdx);
+            }, 60);
+        }
+
+        function closeRenameModal() {
+            document.getElementById('rename-modal').style.display = 'none';
+        }
+
+        function confirmDownload() {
+            let filename = document.getElementById('rename-input').value.trim();
+            if (!filename) filename = `classroom_data_${today()}.csv`;
+            if (!filename.endsWith('.csv')) filename += '.csv';
+            closeRenameModal();
+            exportCSV(filename);
+        }
+
+        function exportCSV(filename) {
+            if (!filename) filename = `classroom_data_${today()}.csv`;
             let csv = 'STUDENTS\n' + students.join(',') + '\n\nASSIGNMENTS\nid,name,date,due\n';
             assignments.forEach(a => csv += `${a.id},"${a.name}",${a.date},${a.due}\n`);
             csv += '\nATTENDANCE\nstudent,date,status\n';
@@ -1450,10 +1917,19 @@
             });
             csv += '\nMAKEUPS\nstudent_asgnId,completed\n';
             Object.keys(makeupCompleted).forEach(k => csv += `${k},true\n`);
+            csv += '\nHOLIDAYS\ndate,label\n';
+            holidays.forEach(h => csv += `${h.date},"${h.label}"\n`);
+            csv += '\nGRADING\nstudent_asgnId,grade\n';
+            Object.entries(grading).forEach(([k, v]) => csv += `${k},${v}\n`);
+
             const a = document.createElement('a');
             a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' }));
-            a.download = `classroom_data_${today()}.csv`; a.click();
-            showToast('CSV downloaded!');
+            a.download = filename; a.click();
+
+            // Save filename to localStorage
+            localStorage.setItem('classroomTracker_csvName', filename);
+            lastAction = 'download';
+            showToast('CSV downloaded as "' + filename + '"');
         }
 
         function importCSV(event) {
@@ -1462,21 +1938,30 @@
             reader.onload = e => {
                 try {
                     const lines = e.target.result.split('\n').map(l => l.trim()).filter(l => l);
-                    let mode = ''; const ns = [], na = [], natt = {}, nmu = {};
+                    let mode = ''; const ns = [], na = [], natt = {}, nmu = {}, nh = [], ng = {};
                     for (const line of lines) {
                         if (line === 'STUDENTS') { mode = 'students'; continue; }
                         if (line === 'ASSIGNMENTS') { mode = 'assignments'; continue; }
                         if (line === 'ATTENDANCE') { mode = 'attendance'; continue; }
                         if (line === 'MAKEUPS') { mode = 'makeups'; continue; }
-                        if (line === 'id,name,date,due' || line === 'student,date,status' || line === 'student_asgnId,completed') continue;
+                        if (line === 'HOLIDAYS') { mode = 'holidays'; continue; }
+                        if (line === 'GRADING') { mode = 'grading'; continue; }
+                        if (line === 'id,name,date,due' || line === 'student,date,status' || line === 'student_asgnId,completed' || line === 'date,label' || line === 'student_asgnId,grade') continue;
                         if (mode === 'students') line.split(',').map(s => s.trim()).filter(Boolean).forEach(s => ns.push(s));
                         else if (mode === 'assignments') { const [id, name, date, due] = parseCSVLine(line); if (id && name && date && due) na.push({ id: Number(id), name, date, due }); }
                         else if (mode === 'attendance') { const [student, date, status] = line.split(','); if (student && date && status) natt[student + '_' + date] = status.trim(); }
                         else if (mode === 'makeups') { const [k, v] = line.split(','); if (k && v === 'true') nmu[k] = true; }
+                        else if (mode === 'holidays') { const parts = parseCSVLine(line); if (parts[0]) nh.push({ date: parts[0], label: parts[1] || '' }); }
+                        else if (mode === 'grading') { const [k, v] = line.split(','); if (k && v) ng[k] = v.trim(); }
                     }
-                    if (ns.length) { students = ns; assignments = na; attendance = natt; makeupCompleted = nmu; renderAttGrid(); renderCal(); showToast(`Imported: ${ns.length} students, ${na.length} assignments`); }
+                    if (ns.length) {
+                        students = ns; assignments = na; attendance = natt; makeupCompleted = nmu; holidays = nh; grading = ng;
+                        renderAttGrid(); renderCal(); showToast(`Imported: ${ns.length} students, ${na.length} assignments`);
+                        markEdited();
+                        saveState();
+                    }
                     else showToast('Could not read CSV');
-                } catch (e) { showToast('Error reading CSV'); }
+                } catch (e) { showToast('Error reading CSV'); console.error(e); }
             };
             reader.readAsText(file); event.target.value = '';
         }
@@ -1487,7 +1972,36 @@
             r.push(cur); return r;
         }
 
+        // ── FEATURE 6: beforeunload prompt ─────────────────────────────────────
+        window.addEventListener('beforeunload', function (e) {
+            if (lastAction !== 'download' && (students.length > 5 || assignments.length > 0 || Object.keys(attendance).length > 0)) {
+                // Show browser prompt
+                e.preventDefault();
+                e.returnValue = 'You have unsaved changes. Download your CSV before leaving?';
+                return e.returnValue;
+            }
+        });
+
+        // ── FEATURE 7: Auto-load banner ─────────────────────────────────────
+        function showAutoLoadBanner(filename) {
+            const banner = document.createElement('div');
+            banner.className = 'auto-load-banner';
+            banner.innerHTML = `📂 Auto-loaded data from: <strong>${filename}</strong><button onclick="this.parentElement.remove()" title="Dismiss">&times;</button>`;
+            document.body.appendChild(banner);
+            setTimeout(() => { if (banner.parentElement) banner.remove(); }, 6000);
+        }
+
         // ── Init ──────────────────────────────────────────────────────────────
+        const didLoad = loadState();
+        if (didLoad) {
+            const savedName = localStorage.getItem('classroomTracker_csvName');
+            if (savedName) {
+                setTimeout(() => showAutoLoadBanner(savedName), 300);
+            } else {
+                setTimeout(() => showAutoLoadBanner('localStorage (auto-saved)'), 300);
+            }
+        }
+
         document.getElementById('att-date').value = today();
         document.getElementById('asgn-date').value = today();
         document.getElementById('asgn-due').value = addDays(today(), 7);
