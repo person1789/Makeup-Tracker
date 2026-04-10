@@ -1143,6 +1143,17 @@
                 <button class="btn sm" onclick="closeHelp()">Close</button>
             </div>
             <div class="help-content">
+                <!-- Policy Alert -->
+                <div style="background:var(--green-bg);border:1px solid var(--green-bd);border-radius:var(--radius-lg);padding:1.25rem;margin-bottom:2rem;display:flex;gap:12px;align-items:flex-start">
+                    <div style="color:var(--green);font-size:24px;line-height:1">&#x2139;</div>
+                    <div>
+                        <h3 style="font-size:14px;color:var(--green);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px">Make-up Privileges Due to Illness</h3>
+                        <p style="font-size:13px;line-height:1.5;color:var(--text2)">
+                            It is the responsibility of the student with an excused absence to complete make-up work. Students who are ill are allowed <strong>two days for every one day absent</strong> to turn in make-up work; however, <strong>assignments/tests due the day of absence are to be turned in or completed the day the student returns to school</strong>. Students are encouraged to utilize Canvas to access assignments.
+                        </p>
+                    </div>
+                </div>
+
                 <!-- Step 1 -->
                 <div class="help-step">
                     <div class="help-step-img" style="background:#e8f0fd">
@@ -1653,7 +1664,19 @@
         }
 
         // FEATURE 1+3: Skip weekends & holidays, and each absent day = 2 school days extension
+        // POLICY: assignments due the day of absence are to be turned in the day the student returns
         function getMakeupDate(student, dueDate, absDays) {
+            const absentOnDue = attendance[student + '_' + dueDate] === 'absent';
+            
+            if (absentOnDue) {
+                // Due the day the student returns to school (the first school day they are NOT absent after the due date)
+                let d = addDays(dueDate, 1);
+                while (!isSchoolDay(d) || attendance[student + '_' + d] === 'absent') {
+                    d = addDays(d, 1);
+                }
+                return d;
+            }
+
             let schoolDaysToAdd = absDays * 2; // 1 absent day = 2 school days extension
             let d = addDays(dueDate, 1);
             while (schoolDaysToAdd > 0) {
@@ -1725,6 +1748,8 @@
 
                         const gradeKey = s + '_' + r.a.id;
                         const gradeVal = grading[gradeKey] || 'not_graded';
+                        const absentOnDue = attendance[s + '_' + r.a.due] === 'absent';
+                        const extensionNote = absentOnDue ? `Absent on due date &rarr; Due upon return` : `${r.abs} day${r.abs > 1 ? 's' : ''} absent &rarr; ${r.abs * 2} school days extension`;
 
                         html += `<div class="makeup-item" style="display:flex;justify-content:space-between;align-items:center;${isDone ? 'opacity:0.6;background:var(--surface2)' : ''}">
           <div style="flex:1">
@@ -1734,7 +1759,7 @@
             </div>
             <div style="font-size:12px;color:var(--text2)">
               Assigned: <strong>${fmt(r.a.date)}</strong> &nbsp; Original due: <strong>${fmt(r.a.due)}</strong>
-              <span class="badge badge-gray" style="margin-left:8px">${r.abs} day${r.abs > 1 ? 's' : ''} absent → ${r.abs * 2} school days extension</span>
+              <span class="badge badge-gray" style="margin-left:8px">${extensionNote}</span>
             </div>
             <div style="margin-top:6px">
               <label style="font-size:11px;margin-right:4px">Grade:</label>
